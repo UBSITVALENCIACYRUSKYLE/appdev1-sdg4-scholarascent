@@ -1,1 +1,75 @@
-<p>login works!</p>
+<div class="login-page">
+    <div class="login-bg">
+      <div class="login-glow left"></div>
+      <div class="login-glow right"></div>
+    </div>
+  
+    <div class="login-container">
+  
+      <div class="login-logo">
+        <span class="logo-icon">⚔️</span>
+        <h1 class="logo-text">Scholar's <span class="glow-text-blue">Ascent</span></h1>
+        <p class="logo-sub">Enter the Gate to begin your journey</p>
+      </div>
+  
+      <div class="login-card">
+  
+        <div class="login-card-header">
+          <div class="gate-icon">🌀</div>
+          <h2 class="login-title">ENTER GATE</h2>
+          <p class="login-subtitle">Authentication required to access the System</p>
+        </div>
+  
+        <div class="login-form">
+  
+          <div class="form-group">
+            <label class="form-label">Hunter ID</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input
+                type="text"
+                class="form-input"
+                placeholder="Enter your username"
+                [(ngModel)]="username"
+              />
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label class="form-label">Access Code</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔑</span>
+              <input
+                type="password"
+                class="form-input"
+                placeholder="Enter your password"
+                [(ngModel)]="password"
+              />
+            </div>
+          </div>
+  
+          <div class="error-message" *ngIf="errorMessage">
+            ⚠️ {{ errorMessage }}
+          </div>
+  
+          <button class="btn-enter" (click)="onLogin()">
+            <span>⚔️ Enter the Gate</span>
+          </button>
+  
+          <div class="login-divider">
+            <span>or</span>
+          </div>
+  
+          <button class="btn-register" (click)="onRegister()">
+            <span>Create Hunter Account</span>
+          </button>
+  
+        </div>
+      </div>
+  
+      <div class="login-sdg">
+        <span>🌍 SDG 4 — Quality Education</span>
+      </div>
+  
+    </div>
+  </div>
