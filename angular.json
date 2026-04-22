@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "fb060a9e-48a9-4ab6-9ad1-caa690a5d697"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -16,8 +17,12 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/appdev1-sdg4-scholarascent",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "polyfills": [
+              "zone.js"
+            ],
             "assets": [
               {
                 "glob": "**/*",

@@ -1,1 +1,196 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg-void: #020408;
+  --bg-dark: #060d18;
+  --bg-card: #0a1628;
+  --bg-card-hover: #0f1f3d;
+
+  --border-glow: #1a3a6e;
+  --border-active: #2d6cf0;
+
+  --accent-blue: #2d6cf0;
+  --accent-blue-bright: #4d8fff;
+  --accent-purple: #7c3aed;
+  --accent-purple-bright: #a855f7;
+  --accent-gold: #f59e0b;
+  --accent-gold-bright: #fbbf24;
+
+  --text-primary: #e2eaf8;
+  --text-secondary: #8ba3cc;
+  --text-muted: #4a6080;
+  --text-gold: #f59e0b;
+
+  --rank-e: #6b7280;
+  --rank-d: #10b981;
+  --rank-c: #3b82f6;
+  --rank-b: #8b5cf6;
+  --rank-a: #f59e0b;
+  --rank-s: #ef4444;
+
+  --glow-blue: 0 0 20px rgba(45, 108, 240, 0.4);
+  --glow-purple: 0 0 20px rgba(124, 58, 237, 0.4);
+  --glow-gold: 0 0 20px rgba(245, 158, 11, 0.4);
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(45, 108, 240, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 108, 240, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+a {
+  color: var(--accent-blue-bright);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 3px; }
+
+.glow-text-blue {
+  color: var(--accent-blue-bright);
+  text-shadow: 0 0 20px rgba(77, 143, 255, 0.6);
+}
+
+.glow-text-gold {
+  color: var(--accent-gold);
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+}
+
+.glow-text-purple {
+  color: var(--accent-purple-bright);
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.card:hover {
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+  box-shadow: var(--glow-blue);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 25px rgba(45, 108, 240, 0.5);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  border: 1px solid var(--border-active);
+  border-radius: 4px;
+  color: var(--accent-blue-bright);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background: rgba(45, 108, 240, 0.1);
+  box-shadow: var(--glow-blue);
+}
+
+.rank-e { color: var(--rank-e); }
+.rank-d { color: var(--rank-d); }
+.rank-c { color: var(--rank-c); }
+.rank-b { color: var(--rank-b); }
+.rank-a { color: var(--rank-a); }
+.rank-s { color: var(--rank-s); text-shadow: 0 0 15px rgba(239, 68, 68, 0.7); }
+
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  padding-top: 70px;
+  min-height: 100vh;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(45, 108, 240, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(45, 108, 240, 0.7); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-fade-up { animation: fadeInUp 0.6s ease forwards; }
+.animate-float { animation: float 3s ease-in-out infinite; }

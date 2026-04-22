@@ -1,1 +1,39 @@
-<p>navbar works!</p>
+<nav class="navbar">
+    <div class="nav-container">
+      <a routerLink="/" class="nav-logo">
+        <span class="logo-icon">⚔️</span>
+        <span class="logo-text">
+          Scholar's <span class="logo-accent">Ascent</span>
+        </span>
+      </a>
+  
+      <ul class="nav-links">
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+        <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+        <li><a routerLink="/lessons" routerLinkActive="active">Quests</a></li>
+        <li><a routerLink="/profile" routerLinkActive="active">Hunter Profile</a></li>
+      </ul>
+  
+      <div class="nav-actions">
+        <div class="nav-rank-badge">
+          <span class="rank-label">RANK</span>
+          <span class="rank-value rank-e">E</span>
+        </div>
+        <a routerLink="/login" class="btn-login">Enter Gate</a>
+      </div>
+  
+      <button class="nav-toggle" (click)="toggleMenu()" [class.open]="menuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  
+    <div class="mobile-menu" [class.open]="menuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
+      <a routerLink="/lessons" routerLinkActive="active" (click)="closeMenu()">Quests</a>
+      <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Hunter Profile</a>
+      <a routerLink="/login" (click)="closeMenu()">Enter Gate</a>
+    </div>
+  </nav>

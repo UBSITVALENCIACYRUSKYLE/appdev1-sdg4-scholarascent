@@ -1,1 +1,93 @@
-<p>lessons works!</p>
+<div class="lessons-page">
+    <div class="lessons-container">
+  
+      <!-- Header -->
+      <div class="lessons-header">
+        <div>
+          <h1 class="lessons-title">Quest <span class="glow-text-blue">Board</span></h1>
+          <p class="lessons-subtitle">Choose a lesson to begin earning EXP</p>
+        </div>
+        <div class="total-quests">
+          <span class="glow-text-gold">{{ lessons.length }}</span>
+          <span class="quests-label">Quests Available</span>
+        </div>
+      </div>
+  
+      <!-- Topic Filter -->
+      <div class="topic-filters">
+        <button
+          *ngFor="let topic of topics"
+          class="topic-btn"
+          [class.active]="selectedTopic() === topic"
+          (click)="setTopic(topic)">
+          {{ topic }}
+        </button>
+      </div>
+  
+      <!-- Lessons Grid -->
+      <div class="lessons-grid">
+        <div
+          *ngFor="let lesson of filteredLessons()"
+          class="lesson-card card"
+          [routerLink]="['/lesson', lesson.id]">
+          <div class="lesson-card-top">
+            <span class="lesson-topic">{{ lesson.topic | uppercase }}</span>
+            <span class="lesson-exp">+{{ lesson.expReward }} EXP</span>
+          </div>
+          <h3 class="lesson-title">{{ lesson.title }}</h3>
+          <p class="lesson-desc">{{ lesson.description }}</p>
+          <div class="lesson-footer">
+            <span class="lesson-status" [class.done]="lesson.completed">
+              {{ lesson.completed ? '✓ Completed' : '○ Not Started' }}
+            </span>
+            <span class="lesson-arrow">→</span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Reference Books from Open Library API -->
+      <div class="books-section">
+        <h2 class="section-title">📚 Reference <span class="glow-text-purple">Books</span></h2>
+        <p class="section-subtitle">Powered by Open Library API</p>
+  
+        <ng-container *ngIf="books$ | async as result; else loadingBooks">
+          <div class="books-grid">
+            <ng-container *ngIf="result.docs.length > 0; else noBooks">
+              <div class="book-card card" *ngFor="let book of result.docs">
+                <div class="book-cover">
+                  <img
+                    *ngIf="book.cover_i"
+                    [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg'"
+                    [alt]="book.title + ' book cover'"
+                    class="book-img"
+                  />
+                  <div *ngIf="!book.cover_i" class="book-no-cover">📖</div>
+                </div>
+                <div class="book-info">
+                  <h4 class="book-title">{{ book.title | titlecase }}</h4>
+                  <p class="book-author" *ngIf="book.author_name">
+                    {{ book.author_name[0] }}
+                  </p>
+                  <p class="book-year" *ngIf="book.first_publish_year">
+                    {{ book.first_publish_year }}
+                  </p>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noBooks>
+              <p class="no-books">No books found. Check your connection.</p>
+            </ng-template>
+          </div>
+        </ng-container>
+  
+        <ng-template #loadingBooks>
+          <div class="books-loading">
+            <div class="loading-spinner"></div>
+            <span>Loading reference books...</span>
+          </div>
+        </ng-template>
+  
+      </div>
+  
+    </div>
+  </div>

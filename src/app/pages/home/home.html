@@ -1,1 +1,131 @@
-<p>home works!</p>
+<section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+  
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>SDG 4 — Quality Education</span>
+        </div>
+  
+        <h1 class="hero-title">
+          <span class="title-line">ARISE,</span>
+          <span class="title-line glow-text-blue">SCHOLAR</span>
+        </h1>
+  
+        <p class="hero-subtitle">
+          Enter the Gate. Master programming.<br>
+          Level up your mind — one quest at a time.
+        </p>
+  
+        <div class="hero-actions">
+          <a routerLink="/login" class="btn-primary">
+            <span>⚔️ Begin Your Journey</span>
+          </a>
+          <a routerLink="/dashboard" class="btn-outline">
+            <span>View Dashboard</span>
+          </a>
+        </div>
+  
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value glow-text-blue">6</span>
+            <span class="stat-label">Ranks</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-value glow-text-purple">20+</span>
+            <span class="stat-label">Lessons</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-value glow-text-gold">∞</span>
+            <span class="stat-label">Knowledge</span>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="hero-visual">
+        <div class="rank-display">
+          <div class="rank-orb">
+            <span class="rank-letter rank-e">E</span>
+          </div>
+          <div class="rank-info">
+            <span class="rank-title-label">Current Rank</span>
+            <span class="rank-name">Unranked Scholar</span>
+          </div>
+        </div>
+  
+        <div class="exp-preview">
+          <div class="exp-header">
+            <span>EXP Progress</span>
+            <span class="glow-text-blue">0 / 500</span>
+          </div>
+          <div class="exp-track">
+            <div class="exp-fill" style="width: 0%"></div>
+          </div>
+        </div>
+  
+        <div class="quest-preview">
+          <div class="quest-preview-title">📋 Daily Quests</div>
+          <div class="quest-item">
+            <span class="quest-dot"></span>
+            <span>Complete 1 Lesson</span>
+            <span class="quest-exp">+100 EXP</span>
+          </div>
+          <div class="quest-item">
+            <span class="quest-dot"></span>
+            <span>Pass a Quiz</span>
+            <span class="quest-exp">+50 EXP</span>
+          </div>
+          <div class="quest-item">
+            <span class="quest-dot"></span>
+            <span>Login Streak</span>
+            <span class="quest-exp">+25 EXP</span>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </section>
+  
+  <!-- Ranks Section -->
+  <section class="ranks-section">
+    <div class="section-container">
+      <h2 class="section-title">Hunter <span class="glow-text-blue">Ranks</span></h2>
+      <p class="section-subtitle">Rise through the ranks as you master programming concepts</p>
+      <div class="ranks-grid">
+        <div class="rank-card" *ngFor="let rank of ranks">
+          <div class="rank-card-letter" [ngClass]="'rank-' + rank.letter.toLowerCase()">{{ rank.letter }}</div>
+          <div class="rank-card-info">
+            <span class="rank-card-name">{{ rank.name }}</span>
+            <span class="rank-card-exp">{{ rank.exp }} EXP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-container">
+      <h2 class="section-title">How It <span class="glow-text-purple">Works</span></h2>
+      <div class="features-grid">
+        <div class="feature-card card" *ngFor="let feature of features">
+          <div class="feature-icon">{{ feature.icon }}</div>
+          <h3 class="feature-title">{{ feature.title }}</h3>
+          <p class="feature-desc">{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="section-container">
+      <div class="footer-content">
+        <span class="footer-logo">⚔️ Scholar's Ascent</span>
+        <span class="footer-sdg">SDG 4 — Quality Education | APPDEV1 Project</span>
+        <span class="footer-author">Valencia, Cyrus Kyle T.</span>
+      </div>
+    </div>
+  </footer>
