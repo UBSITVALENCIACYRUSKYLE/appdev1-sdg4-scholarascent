@@ -7,6 +7,7 @@ import { HunterProfileComponent } from './pages/hunter-profile/hunter-profile';
 import { LoginComponent } from './pages/login/login';
 import { NotFoundComponent } from './pages/not-found/not-found';
 import { authActivateGuard } from './guards/auth-guard';
+import { lessonDeactivateGuard } from './guards/lesson-guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -30,6 +31,12 @@ export const routes: Routes = [
     path: 'profile',
     component: HunterProfileComponent,
     canActivate: [authActivateGuard]
+  },
+  {
+    path: 'lesson/:id',
+    component: LessonDetailComponent,
+    canActivate: [authActivateGuard],
+    canDeactivate: [lessonDeactivateGuard]
   },
   { path: '**', component: NotFoundComponent },
 ];

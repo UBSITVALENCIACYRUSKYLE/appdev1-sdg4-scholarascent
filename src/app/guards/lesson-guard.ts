@@ -1,5 +1,12 @@
 import { CanDeactivateFn } from '@angular/router';
 
-export const lessonGuard: CanDeactivateFn<unknown> = (component, currentRoute, currentState, nextState) => {
+export interface CanComponentDeactivate {
+  canDeactivate: () => boolean;
+}
+
+export const lessonDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> = (component) => {
+  if (component.canDeactivate && !component.canDeactivate()) {
+    return confirm('⚠️ You have unsaved progress. Are you sure you want to leave this quest?');
+  }
   return true;
 };
