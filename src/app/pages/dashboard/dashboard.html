@@ -1,1 +1,118 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+    <div class="dash-container">
+  
+      <div class="dash-header">
+        <div>
+          <h1 class="dash-title">Hunter <span class="glow-text-blue">Dashboard</span></h1>
+          <p class="dash-subtitle">Track your progress and conquer your daily quests</p>
+        </div>
+        <div class="dash-date">
+          <span class="date-label">Today</span>
+          <span class="date-value">{{ today | date: 'MMMM d, yyyy' }}</span>
+        </div>
+      </div>
+  
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card card" *ngFor="let stat of stats">
+          <div class="stat-card-icon">{{ stat.icon }}</div>
+          <div class="stat-card-content">
+            <span class="stat-card-value">{{ stat.value }}</span>
+            <span class="stat-card-label">{{ stat.label }}</span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Main Grid -->
+      <div class="dash-grid">
+  
+        <div class="dash-left">
+  
+          <!-- Hunter Card -->
+          <div class="hunter-card card">
+            <div class="hunter-avatar">
+              <span>🗡️</span>
+            </div>
+            <div class="hunter-info">
+              <h2 class="hunter-name">Hunter</h2>
+              <div class="hunter-rank">
+                <span class="rank-badge-pill rank-e">E-RANK</span>
+                <span class="hunter-title-text">Unranked Scholar</span>
+              </div>
+            </div>
+            <div class="hunter-exp">
+              <div class="exp-labels">
+                <span class="exp-label">EXP</span>
+                <span class="exp-numbers">
+                  <span class="glow-text-blue">0</span> / 500
+                </span>
+              </div>
+              <div class="exp-track">
+                <div class="exp-fill" [style.width]="expPercent + '%'"></div>
+              </div>
+              <div class="exp-next">
+                <span>500 EXP to next rank</span>
+                <span class="rank-d">→ D</span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Daily Quests -->
+          <div class="quests-card card">
+            <h3 class="card-title">⚔️ Daily Quests</h3>
+            <div class="quests-list">
+              <div class="quest-row" *ngFor="let quest of dailyQuests">
+                <div class="quest-check" [class.done]="quest.done">
+                  {{ quest.done ? '✓' : '○' }}
+                </div>
+                <div class="quest-info">
+                  <span class="quest-name" [class.done]="quest.done">{{ quest.name }}</span>
+                  <span class="quest-desc">{{ quest.description }}</span>
+                </div>
+                <span class="quest-reward">+{{ quest.exp }} EXP</span>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+  
+        <div class="dash-right">
+  
+          <!-- Recent Activity -->
+          <div class="activity-card card">
+            <h3 class="card-title">📋 Recent Activity</h3>
+            <div class="activity-empty">
+              <span class="empty-icon">🔮</span>
+              <p>No activity yet. Start your first quest!</p>
+              <a routerLink="/lessons" class="btn-primary" style="font-size: 0.8rem; padding: 0.5rem 1.25rem">
+                <span>Browse Lessons</span>
+              </a>
+            </div>
+          </div>
+  
+          <!-- Rank Progress -->
+          <div class="ranks-card card">
+            <h3 class="card-title">🏆 Rank Progression</h3>
+            <div class="rank-progress-list">
+              <div class="rank-progress-item" *ngFor="let rank of rankProgression">
+                <div class="rp-letter" [ngClass]="'rank-' + rank.letter.toLowerCase()">
+                  {{ rank.letter }}
+                </div>
+                <div class="rp-info">
+                  <span class="rp-name">{{ rank.name }}</span>
+                  <span class="rp-exp">{{ rank.exp }} EXP</span>
+                </div>
+                <div class="rp-status"
+                  [class.current]="rank.current"
+                  [class.locked]="!rank.unlocked">
+                  {{ rank.current ? 'CURRENT' : rank.unlocked ? '✓' : '🔒' }}
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+  
+    </div>
+  </div>
