@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgFor, NgIf, UpperCasePipe, DecimalPipe } from '@angular/common';
 import { LessonService } from '../../services/lesson';
+import { ProgressService } from '../../services/progress';
 import { Lesson } from '../../models/lesson.model';
 import { CanComponentDeactivate } from '../../guards/lesson-guard';
 
@@ -15,6 +16,7 @@ import { CanComponentDeactivate } from '../../guards/lesson-guard';
 export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
   private route = inject(ActivatedRoute);
   private lessonService = inject(LessonService);
+  private progressService = inject(ProgressService);
 
   lesson: Lesson | undefined;
   choiceLetters = ['A', 'B', 'C', 'D'];
@@ -86,6 +88,12 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
     this.quizPassed = this.scorePercent >= 70;
     this.expGained = this.quizPassed ? (this.lesson?.expReward ?? 100) : 0;
     this.quizSubmitted = true;
+
+    // ✅ Update progress service when quiz is passed
+    if (this.quizPassed && this.lesson) {
+      this.progressService.completeLesson(this.lesson.id, this.lesson.expReward);
+      this.progressService.passQuiz(50);
+    }
   }
 
   retryQuiz(): void {
@@ -95,7 +103,6 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
     this.scorePercent = 0;
   }
 
-  // canDeactivate implementation
   canDeactivate(): boolean {
     if (Object.keys(this.selectedAnswers).length > 0 && !this.quizSubmitted) {
       return false;

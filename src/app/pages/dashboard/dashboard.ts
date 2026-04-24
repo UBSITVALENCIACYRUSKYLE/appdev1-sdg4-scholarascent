@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgFor, NgClass, DatePipe } from '@angular/common';
-import { inject } from '@angular/core';
-import { AuthService } from '../../services/auth';
+import { ProgressService } from '../../services/progress';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,17 +11,18 @@ import { AuthService } from '../../services/auth';
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent {
-  private auth = inject(AuthService);
+  progress = inject(ProgressService);
 
   today = new Date();
-  expPercent = 0;
 
-  stats = [
-    { icon: '⚡', value: '0', label: 'Total EXP' },
-    { icon: '📚', value: '0', label: 'Lessons Done' },
-    { icon: '🔥', value: '0', label: 'Day Streak' },
-    { icon: '🏅', value: '0', label: 'Badges Earned' },
-  ];
+  get stats() {
+    return [
+      { icon: '⚡', value: this.progress.currentExp().toString(), label: 'Total EXP' },
+      { icon: '📚', value: this.progress.getTotalLessonsCompleted().toString(), label: 'Lessons Done' },
+      { icon: '🔥', value: this.progress.loginStreak().toString(), label: 'Day Streak' },
+      { icon: '🏅', value: this.progress.quizzesPassed().toString(), label: 'Quizzes Passed' },
+    ];
+  }
 
   dailyQuests = [
     { name: 'Complete a Lesson', description: 'Finish any programming lesson', exp: 100, done: false },
@@ -31,11 +31,21 @@ export class DashboardComponent {
   ];
 
   rankProgression = [
-    { letter: 'E', name: 'Unranked Scholar', exp: '0', current: true, unlocked: true },
+    { letter: 'E', name: 'Unranked Scholar', exp: '0', current: false, unlocked: true },
     { letter: 'D', name: 'Bronze Learner', exp: '500', current: false, unlocked: false },
     { letter: 'C', name: 'Silver Mind', exp: '1,500', current: false, unlocked: false },
     { letter: 'B', name: 'Gold Intellect', exp: '3,500', current: false, unlocked: false },
     { letter: 'A', name: 'Platinum Sage', exp: '7,000', current: false, unlocked: false },
     { letter: 'S', name: 'Shadow Scholar', exp: '12,000', current: false, unlocked: false },
   ];
+
+  getRankProgression() {
+    return this.rankProgression.map(rank => ({
+      ...rank,
+      current: rank.letter === this.progress.currentRank(),
+      unlocked: ['E', 'D', 'C', 'B', 'A', 'S']
+        .indexOf(rank.letter) <= ['E', 'D', 'C', 'B', 'A', 'S']
+        .indexOf(this.progress.currentRank())
+    }));
+  }
 }

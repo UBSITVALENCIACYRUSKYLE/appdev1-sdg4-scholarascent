@@ -15,7 +15,9 @@ import { Observable } from 'rxjs';
 export class LessonsComponent {
   private lessonService = inject(LessonService);
 
-  lessons: Lesson[] = this.lessonService.getLessons();
+  get lessons(): Lesson[] {
+  return this.lessonService.getLessons();
+}
 
   selectedTopic = signal<string>('All');
 

@@ -14,14 +14,14 @@
   
       <!-- Stats Row -->
       <div class="stats-row">
-        <div class="stat-card card" *ngFor="let stat of stats">
-          <div class="stat-card-icon">{{ stat.icon }}</div>
-          <div class="stat-card-content">
-            <span class="stat-card-value">{{ stat.value }}</span>
-            <span class="stat-card-label">{{ stat.label }}</span>
-          </div>
-        </div>
-      </div>
+  <div class="stat-card card" *ngFor="let stat of stats">
+    <div class="stat-card-icon">{{ stat.icon }}</div>
+    <div class="stat-card-content">
+      <span class="stat-card-value">{{ stat.value }}</span>
+      <span class="stat-card-label">{{ stat.label }}</span>
+    </div>
+  </div>
+</div>
   
       <!-- Main Grid -->
       <div class="dash-grid">
@@ -29,33 +29,38 @@
         <div class="dash-left">
   
           <!-- Hunter Card -->
-          <div class="hunter-card card">
-            <div class="hunter-avatar">
-              <span>🗡️</span>
-            </div>
-            <div class="hunter-info">
-              <h2 class="hunter-name">Hunter</h2>
-              <div class="hunter-rank">
-                <span class="rank-badge-pill rank-e">E-RANK</span>
-                <span class="hunter-title-text">Unranked Scholar</span>
-              </div>
-            </div>
-            <div class="hunter-exp">
-              <div class="exp-labels">
-                <span class="exp-label">EXP</span>
-                <span class="exp-numbers">
-                  <span class="glow-text-blue">0</span> / 500
-                </span>
-              </div>
-              <div class="exp-track">
-                <div class="exp-fill" [style.width]="expPercent + '%'"></div>
-              </div>
-              <div class="exp-next">
-                <span>500 EXP to next rank</span>
-                <span class="rank-d">→ D</span>
-              </div>
-            </div>
-          </div>
+<div class="hunter-card card">
+  <div class="hunter-avatar">
+    <span>🗡️</span>
+  </div>
+  <div class="hunter-info">
+    <h2 class="hunter-name">Hunter</h2>
+    <div class="hunter-rank">
+      <span class="rank-badge-pill" [ngClass]="'rank-' + progress.currentRank().toLowerCase()">
+        {{ progress.currentRank() }}-RANK
+      </span>
+      <span class="hunter-title-text">{{ progress.rankName() }}</span>
+    </div>
+  </div>
+  <div class="hunter-exp">
+    <div class="exp-labels">
+      <span class="exp-label">EXP</span>
+      <span class="exp-numbers">
+        <span class="glow-text-blue">{{ progress.currentExp() }}</span>
+        / {{ progress.maxExpForCurrentRank() }}
+      </span>
+    </div>
+    <div class="exp-track">
+      <div class="exp-fill" [style.width]="progress.expPercent() + '%'"></div>
+    </div>
+    <div class="exp-next">
+      <span>{{ progress.maxExpForCurrentRank() - progress.currentExp() }} EXP to next rank</span>
+      <span [ngClass]="'rank-' + progress.nextRank().toLowerCase()">
+        → {{ progress.nextRank() }}
+      </span>
+    </div>
+  </div>
+</div>
   
           <!-- Daily Quests -->
           <div class="quests-card card">
@@ -94,7 +99,7 @@
           <div class="ranks-card card">
             <h3 class="card-title">🏆 Rank Progression</h3>
             <div class="rank-progress-list">
-              <div class="rank-progress-item" *ngFor="let rank of rankProgression">
+              <div class="rank-progress-item" *ngFor="let rank of getRankProgression()">
                 <div class="rp-letter" [ngClass]="'rank-' + rank.letter.toLowerCase()">
                   {{ rank.letter }}
                 </div>

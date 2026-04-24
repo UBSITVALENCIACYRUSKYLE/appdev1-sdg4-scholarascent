@@ -3,16 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { OpenLibrarySearchResponse } from '../models/open-library.model';
 import { Lesson } from '../models/lesson.model';
+import { ProgressService } from './progress';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LessonService {
   private http = inject(HttpClient);
+  private progress = inject(ProgressService);
 
   private readonly API_URL = 'https://openlibrary.org';
 
-  // Static lesson content for programming topics
   private lessons: Lesson[] = [
     { id: 1, title: 'Introduction to Programming', topic: 'Basics', description: 'Learn what programming is and how computers think.', expReward: 100, content: '', completed: false },
     { id: 2, title: 'Variables & Data Types', topic: 'Basics', description: 'Understand how to store and use data in your programs.', expReward: 100, content: '', completed: false },
@@ -24,15 +25,23 @@ export class LessonService {
     { id: 8, title: 'Error Handling', topic: 'Advanced', description: 'Write robust code that handles unexpected situations gracefully.', expReward: 250, content: '', completed: false },
   ];
 
+  // ✅ Returns lessons with completed state from ProgressService
   getLessons(): Lesson[] {
-    return this.lessons;
+    return this.lessons.map(lesson => ({
+      ...lesson,
+      completed: this.progress.isLessonCompleted(lesson.id)
+    }));
   }
 
   getLessonById(id: number): Lesson | undefined {
-    return this.lessons.find(l => l.id === id);
+    const lesson = this.lessons.find(l => l.id === id);
+    if (!lesson) return undefined;
+    return {
+      ...lesson,
+      completed: this.progress.isLessonCompleted(lesson.id)
+    };
   }
 
-  // Fetch programming books from Open Library API
   getProgrammingBooks(query: string = 'programming'): Observable<OpenLibrarySearchResponse> {
     return this.http.get<OpenLibrarySearchResponse>(
       `${this.API_URL}/search.json?q=${query}&subject=programming&limit=8`

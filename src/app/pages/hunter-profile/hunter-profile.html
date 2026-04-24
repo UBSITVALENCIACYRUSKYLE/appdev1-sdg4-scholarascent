@@ -22,23 +22,28 @@
           <div class="hunter-details">
             <h2 class="hunter-name">{{ username }}</h2>
             <div class="hunter-rank-row">
-              <span class="rank-pill rank-e">E-RANK</span>
-              <span class="rank-title-text">Unranked Scholar</span>
+              <span class="rank-pill" [ngClass]="'rank-' + progress.currentRank().toLowerCase()">
+                {{ progress.currentRank() }}-RANK
+              </span>
+              <span class="rank-title-text">{{ progress.rankName() }}</span>
             </div>
             <p class="hunter-joined">Hunter since {{ joinDate | date: 'MMMM yyyy' }}</p>
           </div>
 
+          <!-- EXP Section -->
           <div class="exp-section">
             <div class="exp-row">
               <span class="exp-label">TOTAL EXP</span>
-              <span class="exp-value glow-text-blue">0</span>
+              <span class="exp-value glow-text-blue">{{ progress.currentExp() }}</span>
             </div>
             <div class="exp-track">
-              <div class="exp-fill" style="width: 0%"></div>
+              <div class="exp-fill" [style.width]="progress.expPercent() + '%'"></div>
             </div>
             <div class="exp-next-row">
-              <span>0 / 500 EXP to Rank D</span>
-              <span class="rank-d">0%</span>
+              <span>{{ progress.currentExp() }} / {{ progress.maxExpForCurrentRank() }} EXP to Rank {{ progress.nextRank() }}</span>
+              <span [ngClass]="'rank-' + progress.nextRank().toLowerCase()">
+                {{ progress.expPercent() | number:'1.0-0' }}%
+              </span>
             </div>
           </div>
 
@@ -70,7 +75,7 @@
           <div class="rank-path">
             <div
               class="rank-node"
-              *ngFor="let rank of ranks; let i = index"
+              *ngFor="let rank of getRanks(); let i = index"
               [class.current]="rank.current"
               [class.unlocked]="rank.unlocked">
               <div class="rank-node-circle">
@@ -98,10 +103,12 @@
             <div
               class="badge-item"
               *ngFor="let badge of badges"
-              [class.locked]="!badge.unlocked">
+              [class.locked]="!badge.unlocked"
+              [class.unlocked]="badge.unlocked">
               <div class="badge-icon">{{ badge.icon }}</div>
               <span class="badge-name">{{ badge.name }}</span>
               <span class="badge-desc">{{ badge.description }}</span>
+              <span class="badge-status" *ngIf="badge.unlocked">✓ Unlocked</span>
             </div>
           </div>
         </div>
