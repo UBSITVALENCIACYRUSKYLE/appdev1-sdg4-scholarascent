@@ -1,1 +1,113 @@
-<p>hunter-profile works!</p>
+<div class="profile-page">
+  <div class="profile-container">
+
+    <!-- Header -->
+    <div class="profile-header">
+      <h1 class="profile-title">Hunter <span class="glow-text-blue">Profile</span></h1>
+      <p class="profile-subtitle">Your journey, your stats, your legacy</p>
+    </div>
+
+    <!-- Profile Grid -->
+    <div class="profile-grid">
+
+      <!-- Left Column -->
+      <div class="profile-left">
+
+        <!-- Hunter Card -->
+        <div class="hunter-card card">
+          <div class="hunter-avatar">
+            <span class="avatar-emoji">🗡️</span>
+            <div class="avatar-ring"></div>
+          </div>
+          <div class="hunter-details">
+            <h2 class="hunter-name">{{ username }}</h2>
+            <div class="hunter-rank-row">
+              <span class="rank-pill rank-e">E-RANK</span>
+              <span class="rank-title-text">Unranked Scholar</span>
+            </div>
+            <p class="hunter-joined">Hunter since {{ joinDate | date: 'MMMM yyyy' }}</p>
+          </div>
+
+          <div class="exp-section">
+            <div class="exp-row">
+              <span class="exp-label">TOTAL EXP</span>
+              <span class="exp-value glow-text-blue">0</span>
+            </div>
+            <div class="exp-track">
+              <div class="exp-fill" style="width: 0%"></div>
+            </div>
+            <div class="exp-next-row">
+              <span>0 / 500 EXP to Rank D</span>
+              <span class="rank-d">0%</span>
+            </div>
+          </div>
+
+          <button class="btn-logout" (click)="onLogout()">
+            🚪 Exit Gate
+          </button>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="stats-card card">
+          <h3 class="card-title">📊 Hunter Stats</h3>
+          <div class="stats-list">
+            <div class="stat-row" *ngFor="let stat of stats">
+              <span class="stat-icon">{{ stat.icon }}</span>
+              <span class="stat-name">{{ stat.name }}</span>
+              <span class="stat-value">{{ stat.value }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="profile-right">
+
+        <!-- Rank Progression -->
+        <div class="rank-card card">
+          <h3 class="card-title">🏆 Rank Progression</h3>
+          <div class="rank-path">
+            <div
+              class="rank-node"
+              *ngFor="let rank of ranks; let i = index"
+              [class.current]="rank.current"
+              [class.unlocked]="rank.unlocked">
+              <div class="rank-node-circle">
+                <span [ngClass]="'rank-' + rank.letter.toLowerCase()">
+                  {{ rank.letter }}
+                </span>
+              </div>
+              <div class="rank-node-info">
+                <span class="rank-node-name">{{ rank.name }}</span>
+                <span class="rank-node-exp">{{ rank.exp }} EXP</span>
+              </div>
+              <div class="rank-node-status">
+                <span *ngIf="rank.current" class="status-current">◉ CURRENT</span>
+                <span *ngIf="rank.unlocked && !rank.current" class="status-done">✓</span>
+                <span *ngIf="!rank.unlocked && !rank.current" class="status-locked">🔒</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges -->
+        <div class="badges-card card">
+          <h3 class="card-title">🎖️ Badges</h3>
+          <div class="badges-grid">
+            <div
+              class="badge-item"
+              *ngFor="let badge of badges"
+              [class.locked]="!badge.unlocked">
+              <div class="badge-icon">{{ badge.icon }}</div>
+              <span class="badge-name">{{ badge.name }}</span>
+              <span class="badge-desc">{{ badge.description }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
