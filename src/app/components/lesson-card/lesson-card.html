@@ -1,1 +1,14 @@
-<p>lesson-card works!</p>
+<div class="lesson-card-wrap card" (click)="onView()">
+  <div class="lc-top">
+    <span class="lc-topic">{{ lesson.topic | uppercase }}</span>
+    <span class="lc-exp">+{{ lesson.expReward }} EXP</span>
+  </div>
+  <h3 class="lc-title">{{ lesson.title }}</h3>
+  <p class="lc-desc">{{ lesson.description }}</p>
+  <div class="lc-footer">
+    <span class="lc-status" [class.done]="lesson.completed">
+      {{ lesson.completed ? '✓ Completed' : '○ Not Started' }}
+    </span>
+    <span class="lc-arrow">→</span>
+  </div>
+</div>

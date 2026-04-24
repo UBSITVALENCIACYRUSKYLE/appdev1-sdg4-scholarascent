@@ -1,0 +1,69 @@
+.exp-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.exp-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exp-bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.exp-bar-numbers {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.exp-bar-track {
+  height: 10px;
+  background: rgba(45, 108, 240, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--border-glow);
+}
+
+.exp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  border-radius: 5px;
+  transition: width 1s ease;
+  box-shadow: 0 0 10px rgba(45, 108, 240, 0.5);
+  min-width: 4px;
+}
+
+.exp-bar-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.exp-bar-rank {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.exp-bar-next {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
+.exp-bar-rank-next {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  opacity: 0.5;
+}

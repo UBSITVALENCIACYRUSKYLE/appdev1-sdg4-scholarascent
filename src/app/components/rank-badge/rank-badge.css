@@ -1,0 +1,57 @@
+.rank-badge-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rank-badge-orb {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  flex-shrink: 0;
+  background: rgba(10, 22, 40, 0.8);
+}
+
+.border-rank-e { border-color: var(--rank-e); box-shadow: 0 0 10px rgba(107, 114, 128, 0.3); }
+.border-rank-d { border-color: var(--rank-d); box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+.border-rank-c { border-color: var(--rank-c); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+.border-rank-b { border-color: var(--rank-b); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+.border-rank-a { border-color: var(--rank-a); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+.border-rank-s { border-color: var(--rank-s); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+
+.rank-badge-letter {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Sizes */
+.size-sm .rank-badge-orb { width: 36px; height: 36px; }
+.size-sm .rank-badge-letter { font-size: 1rem; }
+
+.size-md .rank-badge-orb { width: 54px; height: 54px; }
+.size-md .rank-badge-letter { font-size: 1.5rem; }
+
+.size-lg .rank-badge-orb { width: 80px; height: 80px; }
+.size-lg .rank-badge-letter { font-size: 2.2rem; }
+
+.rank-badge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.rank-badge-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+}
+
+.rank-badge-name {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+}

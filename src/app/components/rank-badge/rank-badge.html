@@ -1,1 +1,13 @@
-<p>rank-badge works!</p>
+<div class="rank-badge-wrapper" [ngClass]="'size-' + size">
+  <div class="rank-badge-orb" [ngClass]="'border-rank-' + rank.toLowerCase()">
+    <span class="rank-badge-letter" [ngClass]="'rank-' + rank.toLowerCase()">
+      {{ rank }}
+    </span>
+  </div>
+  <div class="rank-badge-info" *ngIf="showLabel">
+    <span class="rank-badge-label">RANK</span>
+    <span class="rank-badge-name" [ngClass]="'rank-' + rank.toLowerCase()">
+      {{ rankName }}
+    </span>
+  </div>
+</div>

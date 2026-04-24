@@ -1,1 +1,19 @@
-<p>quest-card works!</p>
+<div class="quest-card-wrap" [class.done]="quest.done">
+  <div class="qc-check" [class.done]="quest.done">
+    {{ quest.done ? '✓' : '○' }}
+  </div>
+  <div class="qc-info">
+    <span class="qc-name" [class.done]="quest.done">{{ quest.name }}</span>
+    <span class="qc-desc">{{ quest.description }}</span>
+  </div>
+  <div class="qc-right">
+    <span class="qc-exp">+{{ quest.exp }} EXP</span>
+    <button
+      class="qc-btn"
+      *ngIf="!quest.done"
+      (click)="onComplete()">
+      Start
+    </button>
+    <span class="qc-done-label" *ngIf="quest.done">Done</span>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+.quest-card-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(45, 108, 240, 0.03);
+  border: 1px solid var(--border-glow);
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.quest-card-wrap:hover {
+  border-color: var(--border-active);
+  background: rgba(45, 108, 240, 0.07);
+}
+
+.quest-card-wrap.done {
+  opacity: 0.6;
+  border-color: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.qc-check {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text-muted);
+  width: 20px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.qc-check.done { color: var(--rank-d); }
+
+.qc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.qc-name {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.qc-name.done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.qc-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.qc-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.qc-exp {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+}
+
+.qc-btn {
+  padding: 0.3rem 0.75rem;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.qc-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(45, 108, 240, 0.4);
+}
+
+.qc-done-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--rank-d);
+  letter-spacing: 0.1em;
+}

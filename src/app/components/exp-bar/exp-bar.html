@@ -1,1 +1,20 @@
-<p>exp-bar works!</p>
+<div class="exp-bar-wrapper">
+  <div class="exp-bar-header">
+    <span class="exp-bar-label">EXP</span>
+    <span class="exp-bar-numbers">
+      <span class="glow-text-blue">{{ currentExp }}</span> / {{ maxExp }}
+    </span>
+  </div>
+  <div class="exp-bar-track">
+    <div class="exp-bar-fill" [style.width]="percent + '%'"></div>
+  </div>
+  <div class="exp-bar-footer">
+    <span class="exp-bar-rank" [ngClass]="'rank-' + currentRank.toLowerCase()">
+      {{ currentRank }}
+    </span>
+    <span class="exp-bar-next">{{ maxExp - currentExp }} EXP to next rank</span>
+    <span class="exp-bar-rank-next" [ngClass]="'rank-' + nextRank.toLowerCase()">
+      {{ nextRank }}
+    </span>
+  </div>
+</div>
