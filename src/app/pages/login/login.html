@@ -1,75 +1,169 @@
 <div class="login-page">
-    <div class="login-bg">
-      <div class="login-glow left"></div>
-      <div class="login-glow right"></div>
-    </div>
-  
-    <div class="login-container">
-  
-      <div class="login-logo">
-        <span class="logo-icon">⚔️</span>
-        <h1 class="logo-text">Scholar's <span class="glow-text-blue">Ascent</span></h1>
-        <p class="logo-sub">Enter the Gate to begin your journey</p>
-      </div>
-  
-      <div class="login-card">
-  
-        <div class="login-card-header">
-          <div class="gate-icon">🌀</div>
-          <h2 class="login-title">ENTER GATE</h2>
-          <p class="login-subtitle">Authentication required to access the System</p>
-        </div>
-  
-        <div class="login-form">
-  
-          <div class="form-group">
-            <label class="form-label">Hunter ID</label>
-            <div class="input-wrapper">
-              <span class="input-icon">👤</span>
-              <input
-                type="text"
-                class="form-input"
-                placeholder="Enter your username"
-                [(ngModel)]="username"
-              />
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label class="form-label">Access Code</label>
-            <div class="input-wrapper">
-              <span class="input-icon">🔑</span>
-              <input
-                type="password"
-                class="form-input"
-                placeholder="Enter your password"
-                [(ngModel)]="password"
-              />
-            </div>
-          </div>
-  
-          <div class="error-message" *ngIf="errorMessage">
-            ⚠️ {{ errorMessage }}
-          </div>
-  
-          <button class="btn-enter" (click)="onLogin()">
-            <span>⚔️ Enter the Gate</span>
-          </button>
-  
-          <div class="login-divider">
-            <span>or</span>
-          </div>
-  
-          <button class="btn-register" (click)="onRegister()">
-            <span>Create Hunter Account</span>
-          </button>
-  
-        </div>
-      </div>
-  
-      <div class="login-sdg">
-        <span>🌍 SDG 4 — Quality Education</span>
-      </div>
-  
-    </div>
+  <div class="login-bg">
+    <div class="login-glow left"></div>
+    <div class="login-glow right"></div>
   </div>
+
+  <div class="login-container">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <span class="logo-icon">⚔️</span>
+      <h1 class="logo-text">Scholar's <span class="glow-text-blue">Ascent</span></h1>
+      <p class="logo-sub">{{ isRegistering ? 'Create your Hunter account' : 'Enter the Gate to begin your journey' }}</p>
+    </div>
+
+    <!-- Card -->
+    <div class="login-card">
+
+      <div class="login-card-header">
+        <div class="gate-icon">{{ isRegistering ? '🛡️' : '🌀' }}</div>
+        <h2 class="login-title">{{ isRegistering ? 'CREATE HUNTER' : 'ENTER GATE' }}</h2>
+        <p class="login-subtitle">
+          {{ isRegistering ? 'Register to join the System' : 'Authentication required to access the System' }}
+        </p>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="login-form" *ngIf="!isRegistering">
+
+        <div class="form-group">
+          <label class="form-label">Hunter ID</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Enter your username"
+              [(ngModel)]="username"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Access Code</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔑</span>
+            <input
+              type="password"
+              class="form-input"
+              placeholder="Enter your password"
+              [(ngModel)]="password"
+            />
+          </div>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          ⚠️ {{ errorMessage }}
+        </div>
+
+        <div class="hint-box">
+          <span class="hint-text">💡 Test account: hunter / hunter123</span>
+        </div>
+
+        <button class="btn-enter" (click)="onLogin()">
+          <span>⚔️ Enter the Gate</span>
+        </button>
+
+        <div class="login-divider"><span>or</span></div>
+
+        <button class="btn-register" (click)="showRegister()">
+          <span>Create Hunter Account</span>
+        </button>
+
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="login-form" *ngIf="isRegistering">
+
+        <div class="form-group">
+          <label class="form-label">Hunter ID</label>
+          <div class="input-wrapper" [class.error]="fieldErrors['username']">
+            <span class="input-icon">👤</span>
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Choose a username"
+              [(ngModel)]="regUsername"
+            />
+          </div>
+          <span class="field-error" *ngIf="fieldErrors['username']">
+            {{ fieldErrors['username'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <div class="input-wrapper" [class.error]="fieldErrors['email']">
+            <span class="input-icon">📧</span>
+            <input
+              type="email"
+              class="form-input"
+              placeholder="Enter your email"
+              [(ngModel)]="regEmail"
+            />
+          </div>
+          <span class="field-error" *ngIf="fieldErrors['email']">
+            {{ fieldErrors['email'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Access Code</label>
+          <div class="input-wrapper" [class.error]="fieldErrors['password']">
+            <span class="input-icon">🔑</span>
+            <input
+              type="password"
+              class="form-input"
+              placeholder="Create a password"
+              [(ngModel)]="regPassword"
+            />
+          </div>
+          <span class="field-error" *ngIf="fieldErrors['password']">
+            {{ fieldErrors['password'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirm Access Code</label>
+          <div class="input-wrapper" [class.error]="fieldErrors['confirm']">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              class="form-input"
+              placeholder="Confirm your password"
+              [(ngModel)]="regConfirm"
+            />
+          </div>
+          <span class="field-error" *ngIf="fieldErrors['confirm']">
+            {{ fieldErrors['confirm'] }}
+          </span>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          ⚠️ {{ errorMessage }}
+        </div>
+
+        <div class="success-message" *ngIf="successMessage">
+          ✅ {{ successMessage }}
+        </div>
+
+        <button class="btn-enter" (click)="onRegister()">
+          <span>🛡️ Create Account</span>
+        </button>
+
+        <div class="login-divider"><span>or</span></div>
+
+        <button class="btn-register" (click)="showLogin()">
+          <span>← Back to Login</span>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="login-sdg">
+      <span>🌍 SDG 4 — Quality Education</span>
+    </div>
+
+  </div>
+</div>
