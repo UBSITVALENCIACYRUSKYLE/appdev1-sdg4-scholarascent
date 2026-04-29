@@ -19,6 +19,7 @@
             <span class="avatar-emoji">🗡️</span>
             <div class="avatar-ring"></div>
           </div>
+        
           <div class="hunter-details">
             <h2 class="hunter-name">{{ username }}</h2>
             <div class="hunter-rank-row">
@@ -27,9 +28,27 @@
               </span>
               <span class="rank-title-text">{{ progress.rankName() }}</span>
             </div>
-            <p class="hunter-joined">Hunter since {{ joinDate | date: 'MMMM yyyy' }}</p>
+        
+            <!-- ✅ Hunter ID and Email -->
+            <div class="hunter-meta">
+              <div class="meta-row">
+                <span class="meta-icon">👤</span>
+                <span class="meta-label">Hunter ID</span>
+                <span class="meta-value">{{ username }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-icon">📧</span>
+                <span class="meta-label">Email</span>
+                <span class="meta-value">{{ email }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-icon">📅</span>
+                <span class="meta-label">Joined</span>
+                <span class="meta-value">{{ joinDate | date: 'MMMM d, yyyy' }}</span>
+              </div>
+            </div>
           </div>
-
+        
           <!-- EXP Section -->
           <div class="exp-section">
             <div class="exp-row">
@@ -46,7 +65,7 @@
               </span>
             </div>
           </div>
-
+        
           <button class="btn-logout" (click)="onLogout()">
             🚪 Exit Gate
           </button>

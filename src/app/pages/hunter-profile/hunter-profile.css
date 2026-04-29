@@ -387,3 +387,46 @@
 @media (max-width: 480px) {
   .badges-grid { grid-template-columns: repeat(2, 1fr); }
 }
+.hunter-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(45, 108, 240, 0.04);
+  border: 1px solid var(--border-glow);
+  border-radius: 6px;
+  margin-top: 0.25rem;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.meta-icon {
+  font-size: 0.85rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  width: 70px;
+  flex-shrink: 0;
+}
+
+.meta-value {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-blue-bright);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

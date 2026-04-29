@@ -64,7 +64,27 @@ export class AuthService {
     this._hunters.update(list => [...list, newHunter]);
     return { success: true, message: 'Account created successfully!' };
   }
+  // Add this method inside AuthService class:
+getCurrentHunter(): Hunter | null {
+  const username = this._username();
+  const hunters = this._hunters();
 
+  // Check registered hunters first
+  const found = hunters.find(h => h.username === username);
+  if (found) return found;
+
+  // Default test account
+  if (username === 'hunter') {
+    return {
+      username: 'hunter',
+      email: 'hunter@scholarsascent.com',
+      password: '',
+      createdAt: new Date()
+    };
+  }
+
+  return null;
+}
   logout(): void {
     //  Reset progress on logout
     this.progress.resetProgress();
