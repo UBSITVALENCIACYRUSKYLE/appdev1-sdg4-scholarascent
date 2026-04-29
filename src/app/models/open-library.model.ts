@@ -13,4 +13,6 @@ export interface OpenLibrarySearchResponse {
     subject?: string[];
     number_of_pages_median?: number;
     ratings_average?: number;
+    edition_count?: number;
+    language?: string[];
   }
