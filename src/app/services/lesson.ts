@@ -25,7 +25,6 @@ export class LessonService {
     { id: 8, title: 'Error Handling', topic: 'Advanced', description: 'Write robust code that handles unexpected situations gracefully.', expReward: 250, content: '', completed: false },
   ];
 
-  // ✅ Returns lessons with completed state from ProgressService
   getLessons(): Lesson[] {
     return this.lessons.map(lesson => ({
       ...lesson,
@@ -42,10 +41,12 @@ export class LessonService {
     };
   }
 
+  // All API calls inside service — not in component(done at home)
   getProgrammingBooks(query: string = 'programming'): Observable<OpenLibrarySearchResponse> {
     return this.http.get<OpenLibrarySearchResponse>(
       `${this.API_URL}/search.json?q=${query}&subject=programming&limit=8`
     ).pipe(
+      // catchError handles HTTP errors gracefully(done at home))
       catchError(error => {
         console.error('Open Library API error:', error);
         return of({ numFound: 0, start: 0, docs: [] });
