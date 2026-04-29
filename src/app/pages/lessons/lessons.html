@@ -50,22 +50,23 @@
   <h2 class="section-title">📚 Reference <span class="glow-text-purple">Books</span></h2>
   <p class="section-subtitle">Powered by Open Library API</p>
 
-  <!-- ✅ Loading state -->
-  <div class="books-loading" *ngIf="isLoading">
-    <div class="loading-spinner"></div>
-    <span>Fetching books from Open Library...</span>
-  </div>
+  <ng-container *ngIf="booksState$ | async as state">
 
-  <!-- ✅ Error state -->
-  <div class="error-state" *ngIf="hasError">
-    <span>⚠️ Could not load books. Check your connection and try again.</span>
-  </div>
+    <!-- Loading State -->
+    <div class="books-loading" *ngIf="state.loading">
+      <div class="loading-spinner"></div>
+      <span>Fetching books from Open Library...</span>
+    </div>
 
-  <!-- ✅ async pipe — no manual subscribe -->
-  <ng-container *ngIf="!isLoading && !hasError">
-    <ng-container *ngIf="books$ | async as result">
-      <div class="books-grid" *ngIf="result.docs.length > 0; else noBooks">
-        <div class="book-card card" *ngFor="let book of result.docs">
+    <!-- Error State -->
+    <div class="error-state" *ngIf="state.error">
+      <span>⚠️ Could not load books. Check your connection.</span>
+    </div>
+
+    <!-- Books Grid -->
+    <ng-container *ngIf="!state.loading && !state.error && state.data">
+      <div class="books-grid" *ngIf="state.data.docs?.length > 0; else noBooks">
+        <div class="book-card card" *ngFor="let book of state.data.docs">
           <div class="book-cover">
             <img
               *ngIf="book.cover_i"
@@ -90,8 +91,8 @@
         <p class="no-books">No books found.</p>
       </ng-template>
     </ng-container>
-  </ng-container>
 
+  </ng-container>
 </div>
   
     </div>

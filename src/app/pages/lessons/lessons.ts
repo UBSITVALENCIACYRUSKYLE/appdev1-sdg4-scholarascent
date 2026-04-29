@@ -3,7 +3,13 @@ import { RouterLink } from '@angular/router';
 import { NgFor, NgIf, AsyncPipe, UpperCasePipe, TitleCasePipe } from '@angular/common';
 import { LessonService } from '../../services/lesson';
 import { Lesson } from '../../models/lesson.model';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, startWith, map, catchError, of } from 'rxjs';
+
+interface BooksState {
+  loading: boolean;
+  error: boolean;
+  data: any | null;
+}
 
 @Component({
   selector: 'app-lessons',
@@ -29,19 +35,14 @@ export class LessonsComponent {
 
   topics = ['All', 'Basics', 'Logic', 'Functions', 'Data Structures', 'OOP', 'Advanced'];
 
-  // isLoading flag for loading state
-  isLoading = true;
-  hasError = false;
-
-  // Observable exposed — async pipe used in template, no manual subscribe
-  books$: Observable<any> = this.lessonService.getProgrammingBooks('programming typescript').pipe(
-    tap(() => this.isLoading = false),
-    catchError(() => {
-      this.isLoading = false;
-      this.hasError = true;
-      return of({ numFound: 0, start: 0, docs: [] });
-    })
-  );
+  // ✅ Single observable that tracks loading, error, and data states
+  booksState$: Observable<BooksState> = this.lessonService
+    .getProgrammingBooks('programming typescript')
+    .pipe(
+      map(data => ({ loading: false, error: false, data })),
+      startWith({ loading: true, error: false, data: null }),
+      catchError(() => of({ loading: false, error: true, data: null }))
+    );
 
   setTopic(topic: string): void {
     this.selectedTopic.set(topic);
