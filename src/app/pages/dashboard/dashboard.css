@@ -362,3 +362,36 @@
   @media (max-width: 480px) {
     .stats-row { grid-template-columns: 1fr; }
   }
+  .quest-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+  
+  .quest-claim-btn {
+    padding: 0.25rem 0.7rem;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.05em;
+  }
+  
+  .quest-claim-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 10px rgba(45, 108, 240, 0.4);
+  }
+  
+  .quest-done-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--rank-d);
+    letter-spacing: 0.05em;
+  }

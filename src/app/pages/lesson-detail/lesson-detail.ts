@@ -6,6 +6,11 @@ import { ProgressService } from '../../services/progress';
 import { Lesson } from '../../models/lesson.model';
 import { CanComponentDeactivate } from '../../guards/lesson-guard';
 
+interface DailyBonus {
+  name: string;
+  exp: number;
+}
+
 @Component({
   selector: 'app-lesson-detail',
   standalone: true,
@@ -27,6 +32,7 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
   score = 0;
   scorePercent = 0;
   expGained = 0;
+  dailyQuestBonuses: DailyBonus[] = [];
 
   contentBlocks = [
     {
@@ -81,18 +87,44 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
 
   submitQuiz(): void {
     this.score = 0;
+    this.dailyQuestBonuses = [];
+    this.expGained = 0;
+
     this.quizQuestions.forEach((q, i) => {
       if (this.selectedAnswers[i] === q.correctIndex) this.score++;
     });
+
     this.scorePercent = (this.score / this.quizQuestions.length) * 100;
     this.quizPassed = this.scorePercent >= 70;
-    this.expGained = this.quizPassed ? (this.lesson?.expReward ?? 100) : 0;
     this.quizSubmitted = true;
 
-    // ✅ Update progress service when quiz is passed
     if (this.quizPassed && this.lesson) {
+      // Complete lesson — only grants EXP if not already completed
+      const wasAlreadyCompleted = this.progressService.isLessonCompleted(this.lesson.id);
       this.progressService.completeLesson(this.lesson.id, this.lesson.expReward);
-      this.progressService.passQuiz(50);
+
+      if (!wasAlreadyCompleted) {
+        this.expGained += this.lesson.expReward;
+      }
+
+      // Sync "Complete a Lesson" daily quest
+      const lessonQuestClaimed = this.progressService.completeDailyQuest('complete_lesson', 100);
+      if (lessonQuestClaimed) {
+        this.expGained += 100;
+        this.dailyQuestBonuses.push({ name: '⚔️ Complete a Lesson', exp: 100 });
+      }
+
+      // Sync "Pass a Quiz" daily quest
+      const quizQuestClaimed = this.progressService.completeDailyQuest('pass_quiz', 50);
+      if (quizQuestClaimed) {
+        this.expGained += 50;
+        this.dailyQuestBonuses.push({ name: '🧠 Pass a Quiz', exp: 50 });
+      }
+
+      // Track quiz count even if daily quest already claimed
+      if (!quizQuestClaimed) {
+        this.progressService.passQuiz(0);
+      }
     }
   }
 
@@ -101,6 +133,8 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
     this.quizSubmitted = false;
     this.score = 0;
     this.scorePercent = 0;
+    this.expGained = 0;
+    this.dailyQuestBonuses = [];
   }
 
   canDeactivate(): boolean {

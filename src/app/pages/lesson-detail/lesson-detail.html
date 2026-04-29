@@ -18,6 +18,9 @@
         <div class="lesson-meta">
           <span class="lesson-topic-badge">{{ lesson.topic | uppercase }}</span>
           <span class="lesson-exp-badge">+{{ lesson.expReward }} EXP</span>
+          <span class="lesson-completed-badge" *ngIf="lesson.completed">
+            ✓ Completed
+          </span>
         </div>
         <h1 class="lesson-title">{{ lesson.title }}</h1>
         <p class="lesson-desc">{{ lesson.description }}</p>
@@ -42,6 +45,15 @@
         <!-- Quiz Section -->
         <div class="quiz-section card">
           <h3 class="card-title">🧠 Knowledge Check</h3>
+
+          <!-- Already completed notice -->
+          <div class="already-completed" *ngIf="lesson.completed && !quizSubmitted">
+            <span class="completed-icon">🏆</span>
+            <div class="completed-info">
+              <p class="completed-title">Quest Already Cleared!</p>
+              <p class="completed-desc">You have already completed this lesson and earned its EXP. You can still retake the quiz for practice — no additional EXP will be awarded.</p>
+            </div>
+          </div>
 
           <div *ngIf="!quizSubmitted">
             <div class="quiz-question" *ngFor="let q of quizQuestions; let i = index">
@@ -71,12 +83,29 @@
             <div class="result-header" [class.passed]="quizPassed" [class.failed]="!quizPassed">
               <span class="result-icon">{{ quizPassed ? '🏆' : '💀' }}</span>
               <h3>{{ quizPassed ? 'Quest Complete!' : 'Quest Failed' }}</h3>
-              <p>{{ score }}/{{ quizQuestions.length }} correct
-                ({{ scorePercent | number:'1.0-0' }}%)</p>
+              <p>
+                {{ score }}/{{ quizQuestions.length }} correct
+                ({{ scorePercent | number:'1.0-0' }}%)
+              </p>
             </div>
 
-            <div class="result-exp" *ngIf="quizPassed">
+            <!-- EXP gained — only show if actually earned -->
+            <div class="result-exp" *ngIf="quizPassed && expGained > 0">
               <span class="glow-text-gold">+{{ expGained }} EXP gained!</span>
+            </div>
+
+            <!-- Already completed notice in results -->
+            <div class="result-no-exp" *ngIf="quizPassed && expGained === 0">
+              <span>✓ Practice complete — no EXP awarded (already earned)</span>
+            </div>
+
+            <!-- Daily quest bonuses earned -->
+            <div class="result-bonuses" *ngIf="dailyQuestBonuses.length > 0">
+              <div class="bonus-title">🎯 Daily Quest Bonuses:</div>
+              <div class="bonus-row" *ngFor="let bonus of dailyQuestBonuses">
+                <span class="bonus-name">{{ bonus.name }}</span>
+                <span class="bonus-exp glow-text-gold">+{{ bonus.exp }} EXP</span>
+              </div>
             </div>
 
             <div class="result-answers">
@@ -95,6 +124,9 @@
             <div class="result-actions">
               <button class="btn-retry" (click)="retryQuiz()" *ngIf="!quizPassed">
                 🔄 Retry Quest
+              </button>
+              <button class="btn-retry" (click)="retryQuiz()" *ngIf="quizPassed">
+                🔄 Practice Again
               </button>
               <a routerLink="/lessons" class="btn-primary">
                 <span>← Back to Quest Board</span>

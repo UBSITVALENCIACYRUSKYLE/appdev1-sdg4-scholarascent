@@ -1,7 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgFor, NgClass, DatePipe } from '@angular/common';
 import { ProgressService } from '../../services/progress';
+
+export interface DailyQuest {
+  id: string;
+  name: string;
+  description: string;
+  exp: number;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -12,8 +19,21 @@ import { ProgressService } from '../../services/progress';
 })
 export class DashboardComponent {
   progress = inject(ProgressService);
-
   today = new Date();
+
+  readonly dailyQuestDefs: DailyQuest[] = [
+    { id: 'complete_lesson', name: 'Complete a Lesson', description: 'Finish any programming lesson', exp: 100 },
+    { id: 'pass_quiz', name: 'Pass a Quiz', description: 'Score 70% or higher on any quiz', exp: 50 },
+    { id: 'login_streak', name: 'Login Streak', description: 'Log in today to maintain your streak', exp: 25 },
+  ];
+
+  // ✅ Computed — reacts to signal changes automatically
+  get dailyQuests() {
+    return this.dailyQuestDefs.map(q => ({
+      ...q,
+      done: this.progress.isDailyQuestCompleted(q.id)
+    }));
+  }
 
   get stats() {
     return [
@@ -24,28 +44,25 @@ export class DashboardComponent {
     ];
   }
 
-  dailyQuests = [
-    { name: 'Complete a Lesson', description: 'Finish any programming lesson', exp: 100, done: false },
-    { name: 'Pass a Quiz', description: 'Score 70% or higher on any quiz', exp: 50, done: false },
-    { name: 'Login Streak', description: 'Log in today to maintain your streak', exp: 25, done: false },
-  ];
-
-  rankProgression = [
-    { letter: 'E', name: 'Unranked Scholar', exp: '0', current: false, unlocked: true },
-    { letter: 'D', name: 'Bronze Learner', exp: '500', current: false, unlocked: false },
-    { letter: 'C', name: 'Silver Mind', exp: '1,500', current: false, unlocked: false },
-    { letter: 'B', name: 'Gold Intellect', exp: '3,500', current: false, unlocked: false },
-    { letter: 'A', name: 'Platinum Sage', exp: '7,000', current: false, unlocked: false },
-    { letter: 'S', name: 'Shadow Scholar', exp: '12,000', current: false, unlocked: false },
-  ];
+  // ✅ Only completes quest if not already done
+  claimQuest(questId: string, exp: number): void {
+    this.progress.completeDailyQuest(questId, exp);
+  }
 
   getRankProgression() {
-    return this.rankProgression.map(rank => ({
+    const rankOrder = ['E', 'D', 'C', 'B', 'A', 'S'];
+    const currentIndex = rankOrder.indexOf(this.progress.currentRank());
+    return [
+      { letter: 'E', name: 'Unranked Scholar', exp: '0' },
+      { letter: 'D', name: 'Bronze Learner', exp: '500' },
+      { letter: 'C', name: 'Silver Mind', exp: '1,500' },
+      { letter: 'B', name: 'Gold Intellect', exp: '3,500' },
+      { letter: 'A', name: 'Platinum Sage', exp: '7,000' },
+      { letter: 'S', name: 'Shadow Scholar', exp: '12,000' },
+    ].map((rank, i) => ({
       ...rank,
       current: rank.letter === this.progress.currentRank(),
-      unlocked: ['E', 'D', 'C', 'B', 'A', 'S']
-        .indexOf(rank.letter) <= ['E', 'D', 'C', 'B', 'A', 'S']
-        .indexOf(this.progress.currentRank())
+      unlocked: i <= currentIndex
     }));
   }
 }

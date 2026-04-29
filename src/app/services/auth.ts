@@ -36,8 +36,10 @@ export class AuthService {
     if (found || (username === 'hunter' && password === 'hunter123')) {
       this._isLoggedIn.set(true);
       this._username.set(username);
-      // Load THIS user's saved progress from localStorage
       this.progress.loadProgressForUser(username);
+  
+      // ✅ Auto-claim login streak quest on login
+      this.progress.completeDailyQuest('login_streak', 25);
       return true;
     }
     return false;

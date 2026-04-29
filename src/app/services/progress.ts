@@ -5,6 +5,8 @@ export interface ProgressState {
   completedLessons: number[];
   quizzesPassed: number;
   loginStreak: number;
+  completedDailyQuests: string[];
+  lastQuestDate: string;
 }
 
 @Injectable({
@@ -21,12 +23,15 @@ export class ProgressService {
   private _quizzesPassed = signal<number>(0);
   private _loginStreak = signal<number>(0);
   private _currentUsername = signal<string>('');
+  private _completedDailyQuests = signal<string[]>([]);
+  private _lastQuestDate = signal<string>('');
 
   readonly currentExp = computed(() => this._currentExp());
   readonly completedLessons = computed(() => this._completedLessons());
   readonly quizzesPassed = computed(() => this._quizzesPassed());
   readonly loginStreak = computed(() => this._loginStreak());
   readonly currentUsername = computed(() => this._currentUsername());
+  readonly completedDailyQuests = computed(() => this._completedDailyQuests());
 
   readonly currentRank = computed(() => {
     const exp = this._currentExp();
@@ -63,7 +68,6 @@ export class ProgressService {
   });
 
   constructor() {
-    // ✅ effect() automatically saves to localStorage whenever any signal changes
     effect(() => {
       const username = this._currentUsername();
       if (!username) return;
@@ -72,26 +76,22 @@ export class ProgressService {
         currentExp: this._currentExp(),
         completedLessons: this._completedLessons(),
         quizzesPassed: this._quizzesPassed(),
-        loginStreak: this._loginStreak()
+        loginStreak: this._loginStreak(),
+        completedDailyQuests: this._completedDailyQuests(),
+        lastQuestDate: this._lastQuestDate()
       };
 
       localStorage.setItem(
         `scholars_ascent_progress_${username}`,
         JSON.stringify(state)
       );
-
-      console.log(`[Progress] Saved for ${username}:`, state);
     });
   }
 
   loadProgressForUser(username: string): void {
-    // ✅ Set username FIRST before loading
     this._currentUsername.set(username);
-
     const key = `scholars_ascent_progress_${username}`;
     const saved = localStorage.getItem(key);
-
-    console.log(`[Progress] Loading for ${username}:`, saved);
 
     if (saved) {
       try {
@@ -100,20 +100,43 @@ export class ProgressService {
         this._completedLessons.set(state.completedLessons ?? []);
         this._quizzesPassed.set(state.quizzesPassed ?? 0);
         this._loginStreak.set(state.loginStreak ?? 0);
+
+        // ✅ Reset daily quests if it's a new day
+        const today = this.getTodayString();
+        if (state.lastQuestDate !== today) {
+          this._completedDailyQuests.set([]);
+          this._lastQuestDate.set(today);
+        } else {
+          this._completedDailyQuests.set(state.completedDailyQuests ?? []);
+          this._lastQuestDate.set(state.lastQuestDate ?? today);
+        }
       } catch (e) {
-        console.error('[Progress] Failed to parse saved progress:', e);
-        this._currentExp.set(0);
-        this._completedLessons.set([]);
-        this._quizzesPassed.set(0);
-        this._loginStreak.set(0);
+        this.resetProgress();
       }
     } else {
-      // New user — start fresh
-      this._currentExp.set(0);
-      this._completedLessons.set([]);
-      this._quizzesPassed.set(0);
-      this._loginStreak.set(0);
+      this.resetProgress();
+      this._currentUsername.set(username);
     }
+  }
+
+  // ✅ Check if a daily quest is already completed
+  isDailyQuestCompleted(questId: string): boolean {
+    return this._completedDailyQuests().includes(questId);
+  }
+
+  // ✅ Complete a daily quest — only grants EXP once per day
+  completeDailyQuest(questId: string, expReward: number): boolean {
+    if (this.isDailyQuestCompleted(questId)) {
+      return false; // already done
+    }
+    this._completedDailyQuests.update(list => [...list, questId]);
+    this._lastQuestDate.set(this.getTodayString());
+    this._currentExp.update(exp => exp + expReward);
+    return true;
+  }
+
+  private getTodayString(): string {
+    return new Date().toISOString().split('T')[0]; // e.g. "2026-04-24"
   }
 
   addExp(amount: number): void {
@@ -146,5 +169,7 @@ export class ProgressService {
     this._completedLessons.set([]);
     this._quizzesPassed.set(0);
     this._loginStreak.set(0);
+    this._completedDailyQuests.set([]);
+    this._lastQuestDate.set('');
   }
 }

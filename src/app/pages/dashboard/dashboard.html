@@ -63,21 +63,30 @@
 </div>
   
           <!-- Daily Quests -->
-          <div class="quests-card card">
-            <h3 class="card-title">⚔️ Daily Quests</h3>
-            <div class="quests-list">
-              <div class="quest-row" *ngFor="let quest of dailyQuests">
-                <div class="quest-check" [class.done]="quest.done">
-                  {{ quest.done ? '✓' : '○' }}
-                </div>
-                <div class="quest-info">
-                  <span class="quest-name" [class.done]="quest.done">{{ quest.name }}</span>
-                  <span class="quest-desc">{{ quest.description }}</span>
-                </div>
-                <span class="quest-reward">+{{ quest.exp }} EXP</span>
-              </div>
-            </div>
-          </div>
+<div class="quests-card card">
+  <h3 class="card-title">⚔️ Daily Quests</h3>
+  <div class="quests-list">
+    <div class="quest-row" *ngFor="let quest of dailyQuests">
+      <div class="quest-check" [class.done]="quest.done">
+        {{ quest.done ? '✓' : '○' }}
+      </div>
+      <div class="quest-info">
+        <span class="quest-name" [class.done]="quest.done">{{ quest.name }}</span>
+        <span class="quest-desc">{{ quest.description }}</span>
+      </div>
+      <div class="quest-right">
+        <span class="quest-reward">+{{ quest.exp }} EXP</span>
+        <button
+          class="quest-claim-btn"
+          *ngIf="!quest.done"
+          (click)="claimQuest(quest.id, quest.exp)">
+          Claim
+        </button>
+        <span class="quest-done-tag" *ngIf="quest.done">✓ Done</span>
+      </div>
+    </div>
+  </div>
+</div>
   
         </div>
   
