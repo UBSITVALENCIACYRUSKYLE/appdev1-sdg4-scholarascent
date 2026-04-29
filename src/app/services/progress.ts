@@ -1,10 +1,10 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 
 export interface ProgressState {
   currentExp: number;
   completedLessons: number[];
-  loginStreak: number;
   quizzesPassed: number;
+  loginStreak: number;
 }
 
 @Injectable({
@@ -13,25 +13,20 @@ export interface ProgressState {
 export class ProgressService {
 
   private readonly RANK_THRESHOLDS: { [key: string]: number } = {
-    'E': 0,
-    'D': 500,
-    'C': 1500,
-    'B': 3500,
-    'A': 7000,
-    'S': 12000
+    'E': 0, 'D': 500, 'C': 1500, 'B': 3500, 'A': 7000, 'S': 12000
   };
 
-  // Signals for reactive state
   private _currentExp = signal<number>(0);
   private _completedLessons = signal<number[]>([]);
   private _quizzesPassed = signal<number>(0);
   private _loginStreak = signal<number>(0);
+  private _currentUsername = signal<string>('');
 
-  // Computed signals
   readonly currentExp = computed(() => this._currentExp());
   readonly completedLessons = computed(() => this._completedLessons());
   readonly quizzesPassed = computed(() => this._quizzesPassed());
   readonly loginStreak = computed(() => this._loginStreak());
+  readonly currentUsername = computed(() => this._currentUsername());
 
   readonly currentRank = computed(() => {
     const exp = this._currentExp();
@@ -44,51 +39,97 @@ export class ProgressService {
   });
 
   readonly nextRank = computed(() => {
-    const rank = this.currentRank();
     const next: { [key: string]: string } = {
       'E': 'D', 'D': 'C', 'C': 'B', 'B': 'A', 'A': 'S', 'S': 'S'
     };
-    return next[rank];
+    return next[this.currentRank()];
   });
 
   readonly maxExpForCurrentRank = computed(() => {
-    const next = this.nextRank();
-    return this.RANK_THRESHOLDS[next] ?? 12000;
+    return this.RANK_THRESHOLDS[this.nextRank()] ?? 12000;
   });
 
   readonly expPercent = computed(() => {
-    const exp = this._currentExp();
-    const max = this.maxExpForCurrentRank();
-    return Math.min((exp / max) * 100, 100);
+    return Math.min((this._currentExp() / this.maxExpForCurrentRank()) * 100, 100);
   });
 
   readonly rankName = computed(() => {
     const names: { [key: string]: string } = {
-      'E': 'Unranked Scholar',
-      'D': 'Bronze Learner',
-      'C': 'Silver Mind',
-      'B': 'Gold Intellect',
-      'A': 'Platinum Sage',
-      'S': 'Shadow Scholar'
+      'E': 'Unranked Scholar', 'D': 'Bronze Learner',
+      'C': 'Silver Mind', 'B': 'Gold Intellect',
+      'A': 'Platinum Sage', 'S': 'Shadow Scholar'
     };
     return names[this.currentRank()] ?? 'Unknown';
   });
+
+  constructor() {
+    // ✅ effect() automatically saves to localStorage whenever any signal changes
+    effect(() => {
+      const username = this._currentUsername();
+      if (!username) return;
+
+      const state: ProgressState = {
+        currentExp: this._currentExp(),
+        completedLessons: this._completedLessons(),
+        quizzesPassed: this._quizzesPassed(),
+        loginStreak: this._loginStreak()
+      };
+
+      localStorage.setItem(
+        `scholars_ascent_progress_${username}`,
+        JSON.stringify(state)
+      );
+
+      console.log(`[Progress] Saved for ${username}:`, state);
+    });
+  }
+
+  loadProgressForUser(username: string): void {
+    // ✅ Set username FIRST before loading
+    this._currentUsername.set(username);
+
+    const key = `scholars_ascent_progress_${username}`;
+    const saved = localStorage.getItem(key);
+
+    console.log(`[Progress] Loading for ${username}:`, saved);
+
+    if (saved) {
+      try {
+        const state: ProgressState = JSON.parse(saved);
+        this._currentExp.set(state.currentExp ?? 0);
+        this._completedLessons.set(state.completedLessons ?? []);
+        this._quizzesPassed.set(state.quizzesPassed ?? 0);
+        this._loginStreak.set(state.loginStreak ?? 0);
+      } catch (e) {
+        console.error('[Progress] Failed to parse saved progress:', e);
+        this._currentExp.set(0);
+        this._completedLessons.set([]);
+        this._quizzesPassed.set(0);
+        this._loginStreak.set(0);
+      }
+    } else {
+      // New user — start fresh
+      this._currentExp.set(0);
+      this._completedLessons.set([]);
+      this._quizzesPassed.set(0);
+      this._loginStreak.set(0);
+    }
+  }
 
   addExp(amount: number): void {
     this._currentExp.update(exp => exp + amount);
   }
 
   completeLesson(lessonId: number, expReward: number): void {
-    const completed = this._completedLessons();
-    if (!completed.includes(lessonId)) {
+    if (!this._completedLessons().includes(lessonId)) {
       this._completedLessons.update(list => [...list, lessonId]);
-      this.addExp(expReward);
+      this._currentExp.update(exp => exp + expReward);
     }
   }
 
   passQuiz(expReward: number): void {
     this._quizzesPassed.update(n => n + 1);
-    this.addExp(expReward);
+    this._currentExp.update(exp => exp + expReward);
   }
 
   isLessonCompleted(lessonId: number): boolean {
@@ -97,5 +138,13 @@ export class ProgressService {
 
   getTotalLessonsCompleted(): number {
     return this._completedLessons().length;
+  }
+
+  resetProgress(): void {
+    this._currentUsername.set('');
+    this._currentExp.set(0);
+    this._completedLessons.set([]);
+    this._quizzesPassed.set(0);
+    this._loginStreak.set(0);
   }
 }

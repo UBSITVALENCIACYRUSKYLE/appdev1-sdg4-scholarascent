@@ -1,5 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProgressService } from './progress';
 
 export interface Hunter {
   username: string;
@@ -13,6 +14,7 @@ export interface Hunter {
 })
 export class AuthService {
   private router = inject(Router);
+  private progress = inject(ProgressService);
 
   private _isLoggedIn = signal<boolean>(false);
   private _username = signal<string>('');
@@ -30,11 +32,12 @@ export class AuthService {
     const found = hunters.find(
       h => h.username === username && h.password === password
     );
-
-    // Also allow default test account
+  
     if (found || (username === 'hunter' && password === 'hunter123')) {
       this._isLoggedIn.set(true);
       this._username.set(username);
+      // Load THIS user's saved progress from localStorage
+      this.progress.loadProgressForUser(username);
       return true;
     }
     return false;
@@ -63,6 +66,8 @@ export class AuthService {
   }
 
   logout(): void {
+    //  Reset progress on logout
+    this.progress.resetProgress();
     this._isLoggedIn.set(false);
     this._username.set('');
     this.router.navigate(['/login']);
