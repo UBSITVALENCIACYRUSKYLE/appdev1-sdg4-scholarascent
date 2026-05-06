@@ -23,6 +23,10 @@ export class LessonService {
     { id: 6, title: 'Arrays & Collections', topic: 'Data Structures', description: 'Store multiple values in a single variable using arrays.', expReward: 200, content: '', completed: false },
     { id: 7, title: 'Object-Oriented Programming', topic: 'OOP', description: 'Model real-world things using classes and objects.', expReward: 300, content: '', completed: false },
     { id: 8, title: 'Error Handling', topic: 'Advanced', description: 'Write robust code that handles unexpected situations gracefully.', expReward: 250, content: '', completed: false },
+    { id: 9, title: 'TypeScript Basics', topic: 'Basics', description: 'Learn static typing and TypeScript fundamentals.', expReward: 150, content: '', completed: false },
+    { id: 10, title: 'Recursion', topic: 'Functions', description: 'Solve problems by having functions call themselves.', expReward: 250, content: '', completed: false },
+    { id: 11, title: 'Sorting Algorithms', topic: 'Data Structures', description: 'Learn how to sort data using bubble, selection, and merge sort.', expReward: 300, content: '', completed: false },
+    { id: 12, title: 'Async & Promises', topic: 'Advanced', description: 'Handle asynchronous code with Promises and async/await.', expReward: 300, content: '', completed: false },
   ];
 
   getLessons(): Lesson[] {

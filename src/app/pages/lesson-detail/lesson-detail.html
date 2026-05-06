@@ -133,6 +133,44 @@
               </a>
             </div>
           </div>
+          
+          <!-- Activity Section -->
+<div class="activity-section card" *ngIf="showActivity && activity && !activitySubmitted">
+  <h3 class="card-title">{{ activity.title }}</h3>
+  <p class="activity-desc">{{ activity.description }}</p>
+
+  <div class="activity-prompt">
+    <pre class="prompt-text">{{ activity.prompt }}</pre>
+  </div>
+
+  <div class="activity-type-badge" [ngClass]="'type-' + activity.type">
+    {{ activity.type === 'code' ? '💻 Code Activity' :
+       activity.type === 'debug' ? '🐛 Debug Activity' :
+       activity.type === 'reflection' ? '🖊️ Reflection' :
+       '🏆 Challenge' }}
+  </div>
+
+  <textarea
+    class="activity-input"
+    placeholder="Write your answer here..."
+    [(ngModel)]="activityAnswer"
+    rows="8">
+  </textarea>
+
+  <button
+    class="btn-submit"
+    (click)="submitActivity()"
+    [disabled]="activityAnswer.trim().length < 10">
+    📝 Submit Activity
+  </button>
+</div>
+
+<!-- Activity Submitted -->
+<div class="activity-done card" *ngIf="activitySubmitted">
+  <span class="activity-done-icon">✅</span>
+  <h3>Activity Submitted!</h3>
+  <p>Great work, Hunter! Your response has been recorded.</p>
+</div>
 
         </div>
       </div>
