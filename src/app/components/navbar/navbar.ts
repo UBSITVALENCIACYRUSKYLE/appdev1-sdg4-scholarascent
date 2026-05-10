@@ -19,7 +19,12 @@ export class NavbarComponent {
 
   // ✅ Reactive rank from ProgressService signal
   currentRank = this.progress.currentRank;
+
+  // ✅ Auth state
   isLoggedIn = this.auth.isAuthenticated;
+
+  // ✅ Quiz in progress indicator
+  quizInProgress = (this.progress as any).quizInProgress ?? false;
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;

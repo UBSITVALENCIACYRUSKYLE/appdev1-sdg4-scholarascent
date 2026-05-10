@@ -82,7 +82,7 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
 
     if (this.quizPassed && this.lesson) {
       const wasAlreadyCompleted = this.progressService.isLessonCompleted(this.lesson.id);
-      this.progressService.completeLesson(this.lesson.id, this.lesson.expReward);
+      this.progressService.completeLesson(this.lesson.id, this.lesson.expReward, this.lesson.title);
 
       if (!wasAlreadyCompleted) {
         this.expGained += this.lesson.expReward;

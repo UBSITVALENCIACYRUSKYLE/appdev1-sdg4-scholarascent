@@ -68,12 +68,13 @@
       <div class="books-grid" *ngIf="state.data.docs?.length > 0; else noBooks">
         <div class="book-card card" *ngFor="let book of state.data.docs">
           <div class="book-cover">
-            <img
-              *ngIf="book.cover_i"
-              [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg'"
-              [alt]="book.title + ' book cover'"
-              class="book-img"
-            />
+           <img
+  *ngIf="book.cover_i"
+  [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg'"
+  [alt]="'Book cover for ' + (book.title | titlecase) + (book.author_name ? ' by ' + book.author_name[0] : '')"
+  class="book-img"
+/>
+<div *ngIf="!book.cover_i" class="book-no-cover" role="img" [attr.aria-label]="'No cover available for ' + book.title">📖</div>
             <div *ngIf="!book.cover_i" class="book-no-cover">📖</div>
           </div>
           <div class="book-info">
