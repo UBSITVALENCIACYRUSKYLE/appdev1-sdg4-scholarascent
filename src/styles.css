@@ -57,6 +57,50 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Rank Up Toast ── */
+.rank-up-toast {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  z-index: 999;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: 1px solid var(--accent-purple-bright);
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.5);
+  animation: toastIn 0.4s ease forwards, toastOut 0.4s ease 3s forwards;
+  pointer-events: none;
+}
+
+.rank-up-toast .toast-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 0.1em;
+  display: block;
+}
+
+.rank-up-toast .toast-sub {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.8);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
 body::before {
   content: '';
   position: fixed;

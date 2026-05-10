@@ -2,3 +2,9 @@
 <main class="page-wrapper">
   <router-outlet />
 </main>
+
+<!-- Rank Up Toast -->
+<div class="rank-up-toast" *ngIf="showRankUp">
+  <span class="toast-title">⚔️ RANK UP!</span>
+  <span class="toast-sub">You are now {{ newRank }} — {{ newRankName }}</span>
+</div>
