@@ -1,22 +1,24 @@
-<section class="hero">
+<article class="home-page">
+
+  <section class="hero">
     <div class="hero-container">
       <div class="hero-content">
-  
+
         <div class="hero-badge">
           <span class="badge-dot"></span>
           <span>SDG 4 — Quality Education</span>
         </div>
-  
+
         <h1 class="hero-title">
           <span class="title-line">ARISE,</span>
           <span class="title-line glow-text-blue">SCHOLAR</span>
         </h1>
-  
+
         <p class="hero-subtitle">
           Enter the Gate. Master programming.<br>
           Level up your mind — one quest at a time.
         </p>
-  
+
         <div class="hero-actions">
           <a routerLink="/login" class="btn-primary">
             <span>⚔️ Begin Your Journey</span>
@@ -25,7 +27,7 @@
             <span>View Dashboard</span>
           </a>
         </div>
-  
+
         <div class="hero-stats">
           <div class="stat">
             <span class="stat-value glow-text-blue">6</span>
@@ -42,10 +44,10 @@
             <span class="stat-label">Knowledge</span>
           </div>
         </div>
-  
+
       </div>
-  
-      <div class="hero-visual">
+
+      <aside class="hero-visual">
         <div class="rank-display">
           <div class="rank-orb">
             <span class="rank-letter rank-e">E</span>
@@ -55,7 +57,7 @@
             <span class="rank-name">Unranked Scholar</span>
           </div>
         </div>
-  
+
         <div class="exp-preview">
           <div class="exp-header">
             <span>EXP Progress</span>
@@ -65,7 +67,7 @@
             <div class="exp-fill" style="width: 0%"></div>
           </div>
         </div>
-  
+
         <div class="quest-preview">
           <div class="quest-preview-title">📋 Daily Quests</div>
           <div class="quest-item">
@@ -84,18 +86,17 @@
             <span class="quest-exp">+25 EXP</span>
           </div>
         </div>
-      </div>
-  
+      </aside>
+
     </div>
   </section>
-  
-  <!-- Ranks Section -->
-  <section class="ranks-section">
+
+  <section class="ranks-section" aria-label="Hunter Ranks">
     <div class="section-container">
       <h2 class="section-title">Hunter <span class="glow-text-blue">Ranks</span></h2>
       <p class="section-subtitle">Rise through the ranks as you master programming concepts</p>
-      <div class="ranks-grid">
-        <div class="rank-card" *ngFor="let rank of ranks">
+      <div class="ranks-grid" role="list">
+        <div class="rank-card" role="listitem" *ngFor="let rank of ranks">
           <div class="rank-card-letter" [ngClass]="'rank-' + rank.letter.toLowerCase()">{{ rank.letter }}</div>
           <div class="rank-card-info">
             <span class="rank-card-name">{{ rank.name }}</span>
@@ -105,22 +106,21 @@
       </div>
     </div>
   </section>
-  
-  <!-- Features Section -->
-  <section class="features-section">
+
+  <section class="features-section" aria-label="How It Works">
     <div class="section-container">
       <h2 class="section-title">How It <span class="glow-text-purple">Works</span></h2>
       <div class="features-grid">
-        <div class="feature-card card" *ngFor="let feature of features">
-          <div class="feature-icon">{{ feature.icon }}</div>
+        <article class="feature-card card" *ngFor="let feature of features">
+          <div class="feature-icon" aria-hidden="true">{{ feature.icon }}</div>
           <h3 class="feature-title">{{ feature.title }}</h3>
           <p class="feature-desc">{{ feature.description }}</p>
-        </div>
+        </article>
       </div>
     </div>
   </section>
-  
-  <footer class="footer">
+
+  <footer class="footer" role="contentinfo">
     <div class="section-container">
       <div class="footer-content">
         <span class="footer-logo">⚔️ Scholar's Ascent</span>
@@ -129,3 +129,5 @@
       </div>
     </div>
   </footer>
+
+</article>
