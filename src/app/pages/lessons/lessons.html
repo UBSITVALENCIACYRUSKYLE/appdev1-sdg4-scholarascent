@@ -1,18 +1,39 @@
-<div class="lessons-page">
-    <div class="lessons-container">
-  
-      <!-- Header -->
-      <div class="lessons-header">
-        <div>
-          <h1 class="lessons-title">Quest <span class="glow-text-blue">Board</span></h1>
-          <p class="lessons-subtitle">Choose a lesson to begin earning EXP</p>
-        </div>
-        <div class="total-quests">
-          <span class="glow-text-gold">{{ lessons.length }}</span>
-          <span class="quests-label">Quests Available</span>
+<div class="lessons-header">
+  <div>
+    <h1 class="lessons-title">Quest <span class="glow-text-blue">Board</span></h1>
+    <p class="lessons-subtitle">Choose a lesson to begin earning EXP</p>
+    <!-- Progress Summary -->
+    <div class="progress-summary">
+      <span class="progress-done glow-text-gold">{{ completedCount }}</span>
+      <span class="progress-sep">/</span>
+      <span class="progress-total">{{ totalCount }}</span>
+      <span class="progress-label">lessons completed</span>
+      <div class="progress-mini-track">
+        <div class="progress-mini-fill"
+          [style.width]="(completedCount / totalCount * 100) + '%'">
         </div>
       </div>
-  
+    </div>
+  </div>
+
+  <div class="lessons-header-right">
+    <!-- Search -->
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search quests..."
+        (input)="onSearch($event)"
+        aria-label="Search lessons"
+      />
+    </div>
+    <div class="total-quests">
+      <span class="glow-text-gold">{{ filteredLessons.length }}</span>
+      <span class="quests-label">Quests Found</span>
+    </div>
+  </div>
+</div>
       <!-- Topic Filter -->
       <div class="topic-filters">
         <button
@@ -27,7 +48,7 @@
       <!-- Lessons Grid -->
       <div class="lessons-grid">
         <div
-          *ngFor="let lesson of filteredLessons()"
+          *ngFor="let lesson of filteredLessons"
           class="lesson-card card"
           [routerLink]="['/lesson', lesson.id]">
           <div class="lesson-card-top">
@@ -95,6 +116,3 @@
 
   </ng-container>
 </div>
-  
-    </div>
-  </div>

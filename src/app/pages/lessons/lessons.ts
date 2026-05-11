@@ -1,7 +1,8 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgFor, NgIf, AsyncPipe, UpperCasePipe, TitleCasePipe } from '@angular/common';
 import { LessonService } from '../../services/lesson';
+import { ProgressService } from '../../services/progress';
 import { Lesson } from '../../models/lesson.model';
 import { Observable, startWith, map, catchError, of } from 'rxjs';
 
@@ -14,28 +15,47 @@ interface BooksState {
 @Component({
   selector: 'app-lessons',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, AsyncPipe, UpperCasePipe, TitleCasePipe],
+  imports: [RouterLink, NgFor, NgIf, AsyncPipe, UpperCasePipe, TitleCasePipe, NgFor],
   templateUrl: './lessons.html',
   styleUrl: './lessons.css'
 })
 export class LessonsComponent {
   private lessonService = inject(LessonService);
+  private progressService = inject(ProgressService);
+
+  selectedTopic = signal<string>('All');
+  searchQuery = signal<string>('');
+
+  topics = ['All', 'Basics', 'Logic', 'Functions', 'Data Structures', 'OOP', 'Advanced'];
+
+  // ✅ Getter so Angular re-evaluates on every change detection
+  // picking up latest completion state from ProgressService
+  get filteredLessons(): Lesson[] {
+    const all = this.lessonService.getLessons();
+    const topic = this.selectedTopic();
+    const query = this.searchQuery().toLowerCase();
+
+    return all.filter(l => {
+      const matchTopic = topic === 'All' || l.topic === topic;
+      const matchSearch = !query || l.title.toLowerCase().includes(query);
+      return matchTopic && matchSearch;
+    });
+  }
 
   get lessons(): Lesson[] {
     return this.lessonService.getLessons();
   }
 
-  selectedTopic = signal<string>('All');
+  // ✅ Progress summary
+  get completedCount(): number {
+    return this.lessonService.getLessons().filter(l => l.completed).length;
+  }
 
-  filteredLessons = computed(() => {
-    const all = this.lessonService.getLessons();
-    if (this.selectedTopic() === 'All') return all;
-    return all.filter(l => l.topic === this.selectedTopic());
-  });
+  get totalCount(): number {
+    return this.lessonService.getLessons().length;
+  }
 
-  topics = ['All', 'Basics', 'Logic', 'Functions', 'Data Structures', 'OOP', 'Advanced'];
-
-  // ✅ Single observable that tracks loading, error, and data states
+  // ✅ Observable with loading, error, and data states via async pipe
   booksState$: Observable<BooksState> = this.lessonService
     .getProgrammingBooks('programming typescript')
     .pipe(
@@ -46,5 +66,9 @@ export class LessonsComponent {
 
   setTopic(topic: string): void {
     this.selectedTopic.set(topic);
+  }
+
+  onSearch(event: Event): void {
+    this.searchQuery.set((event.target as HTMLInputElement).value);
   }
 }
