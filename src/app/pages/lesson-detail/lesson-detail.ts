@@ -126,7 +126,13 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
     this.activityAnswer = '';
     this.activitySubmitted = false;
   }
+  get hasStartedQuiz(): boolean {
+  return Object.keys(this.selectedAnswers).length > 0;
+}
 
+answeredCount(): number {
+  return Object.keys(this.selectedAnswers).length;
+}
   canDeactivate(): boolean {
     if (Object.keys(this.selectedAnswers).length > 0 && !this.quizSubmitted) {
       return false;
