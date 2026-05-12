@@ -49,15 +49,15 @@ export class HunterProfileComponent {
   }
 
   get stats() {
-    return [
-      { icon: '⚡', name: 'Total EXP', value: this.progress.currentExp().toString() },
-      { icon: '📚', name: 'Lessons Completed', value: this.progress.getTotalLessonsCompleted().toString() },
-      { icon: '✅', name: 'Quizzes Passed', value: this.progress.quizzesPassed().toString() },
-      { icon: '🔥', name: 'Login Streak', value: this.progress.loginStreak() + ' days' },
-      { icon: '🏅', name: 'Badges Earned', value: this.getUnlockedBadges().toString() },
-      { icon: '⏱️', name: 'Time Studied', value: '0 hrs' },
-    ];
-  }
+  return [
+    { icon: '⚡', name: 'Total EXP', value: this.progress.currentExp().toString() },
+    { icon: '📚', name: 'Lessons Completed', value: this.progress.getTotalLessonsCompleted().toString() },
+    { icon: '✅', name: 'Quizzes Passed', value: this.progress.quizzesPassed().toString() },
+    { icon: '🔥', name: 'Login Streak', value: this.progress.loginStreak() + ' days' },
+    { icon: '🏅', name: 'Badges Earned', value: this.getUnlockedBadges().toString() },
+    { icon: '⏱️', name: 'Time Studied', value: this.progress.studyTimeHours() },
+  ];
+}
 
   getRanks() {
     const currentIndex = this.rankOrder.indexOf(this.progress.currentRank());

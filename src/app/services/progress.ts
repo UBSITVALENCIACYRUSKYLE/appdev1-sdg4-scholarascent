@@ -7,6 +7,8 @@ export interface ProgressState {
   loginStreak: number;
   completedDailyQuests: string[];
   lastQuestDate: string;
+  studyTimeMinutes: number;
+  lastLoginDate: string;
   recentActivity: { lessonTitle: string; exp: number; date: string }[];
 }
 
@@ -29,7 +31,17 @@ export class ProgressService {
   private _lastQuestDate = signal<string>('');
   private _recentActivity = signal<{ lessonTitle: string; exp: number; date: string }[]>([]);
   private _quizInProgress = signal<boolean>(false);
+  private _studyTimeMinutes = signal<number>(0);
+private _lastLoginDate = signal<string>('');
 
+readonly studyTimeMinutes = computed(() => this._studyTimeMinutes());
+readonly studyTimeHours = computed(() => {
+  const mins = this._studyTimeMinutes();
+  if (mins < 60) return `${mins} min`;
+  const hrs = Math.floor(mins / 60);
+  const remaining = mins % 60;
+  return remaining > 0 ? `${hrs}h ${remaining}m` : `${hrs} hrs`;
+});
   // ── Computed Signals ──
   readonly currentExp = computed(() => this._currentExp());
   readonly completedLessons = computed(() => this._completedLessons());
@@ -90,6 +102,8 @@ export class ProgressService {
         loginStreak: this._loginStreak(),
         completedDailyQuests: this._completedDailyQuests(),
         lastQuestDate: this._lastQuestDate(),
+        studyTimeMinutes: this._studyTimeMinutes(),
+        lastLoginDate: this._lastLoginDate(),
         recentActivity: this._recentActivity()
       };
 
@@ -109,14 +123,39 @@ export class ProgressService {
     if (saved) {
       try {
         const state: ProgressState = JSON.parse(saved);
+        const today = this.getTodayString();
         this._currentExp.set(state.currentExp ?? 0);
         this._completedLessons.set(state.completedLessons ?? []);
         this._quizzesPassed.set(state.quizzesPassed ?? 0);
         this._loginStreak.set(state.loginStreak ?? 0);
+        this._studyTimeMinutes.set(state.studyTimeMinutes ?? 0);
+        // ✅ Fix login streak
+        const lastLogin = state.lastLoginDate ?? '';
+        if (lastLogin === '') {
+          // First ever login
+          this._loginStreak.set(1);
+          this._lastLoginDate.set(today);
+        } else if (lastLogin === today) {
+          // Already logged in today — keep streak
+          this._loginStreak.set(state.loginStreak ?? 1);
+          this._lastLoginDate.set(today);
+        } else {
+          // Check if yesterday
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+          if (lastLogin === yesterdayStr) {
+            // Consecutive day — increment streak
+            this._loginStreak.update(s => s + 1);
+          } else {
+            // Streak broken
+            this._loginStreak.set(1);
+          }
+          this._lastLoginDate.set(today);
+        }
         this._recentActivity.set(state.recentActivity ?? []);
 
         // ✅ Reset daily quests if it's a new day
-        const today = this.getTodayString();
         if (state.lastQuestDate !== today) {
           this._completedDailyQuests.set([]);
           this._lastQuestDate.set(today);
@@ -204,5 +243,10 @@ export class ProgressService {
     this._lastQuestDate.set('');
     this._recentActivity.set([]);
     this._quizInProgress.set(false);
+    this._studyTimeMinutes.set(0);
+    this._lastLoginDate.set('');
+  }
+  addStudyTime(minutes: number): void {
+    this._studyTimeMinutes.update(m => m + minutes);
   }
 }

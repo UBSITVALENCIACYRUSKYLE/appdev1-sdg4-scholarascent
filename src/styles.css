@@ -219,6 +219,16 @@ a {
   z-index: 1;
   padding-top: 70px;
   min-height: 100vh;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.nav-container {
+  max-width: 1400px !important;
+  margin: 0 auto;
 }
 
 @keyframes fadeInUp {

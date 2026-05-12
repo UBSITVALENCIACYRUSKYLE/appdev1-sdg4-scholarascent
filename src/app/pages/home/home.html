@@ -1,5 +1,6 @@
 <article class="home-page">
 
+  <!-- ── HERO ── -->
   <section class="hero">
     <div class="hero-container">
       <div class="hero-content">
@@ -23,8 +24,8 @@
           <a routerLink="/login" class="btn-primary">
             <span>⚔️ Begin Your Journey</span>
           </a>
-          <a routerLink="/dashboard" class="btn-outline">
-            <span>View Dashboard</span>
+          <a routerLink="/lessons" class="btn-outline">
+            <span>Browse Quests</span>
           </a>
         </div>
 
@@ -47,43 +48,35 @@
 
       </div>
 
-      <aside class="hero-visual">
-        <div class="rank-display">
-          <div class="rank-orb">
-            <span class="rank-letter rank-e">E</span>
-          </div>
-          <div class="rank-info">
-            <span class="rank-title-label">Current Rank</span>
-            <span class="rank-name">Unranked Scholar</span>
-          </div>
-        </div>
-
-        <div class="exp-preview">
-          <div class="exp-header">
-            <span>EXP Progress</span>
-            <span class="glow-text-blue">0 / 500</span>
-          </div>
-          <div class="exp-track">
-            <div class="exp-fill" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <div class="quest-preview">
-          <div class="quest-preview-title">📋 Daily Quests</div>
-          <div class="quest-item">
-            <span class="quest-dot"></span>
-            <span>Complete 1 Lesson</span>
-            <span class="quest-exp">+100 EXP</span>
-          </div>
-          <div class="quest-item">
-            <span class="quest-dot"></span>
-            <span>Pass a Quiz</span>
-            <span class="quest-exp">+50 EXP</span>
-          </div>
-          <div class="quest-item">
-            <span class="quest-dot"></span>
-            <span>Login Streak</span>
-            <span class="quest-exp">+25 EXP</span>
+      <!-- About Us Panel -->
+      <aside class="about-panel">
+        <div class="about-card">
+          <div class="about-icon">⚔️</div>
+          <h2 class="about-title">What is Scholar's Ascent?</h2>
+          <p class="about-desc">
+            Scholar's Ascent is a Solo Leveling-inspired programming learning RPG.
+            You are a Hunter — and knowledge is your power. Complete lessons,
+            pass quizzes, and rise through six ranks from <span class="rank-e">E</span> to
+            <span class="rank-s">S</span>.
+          </p>
+          <div class="about-divider"></div>
+          <div class="about-meta">
+            <div class="about-meta-item">
+              <span class="meta-icon">🎓</span>
+              <span>Built for SDG 4 — Quality Education</span>
+            </div>
+            <div class="about-meta-item">
+              <span class="meta-icon">🏫</span>
+              <span>University of Baguio — APPDEV1</span>
+            </div>
+            <div class="about-meta-item">
+              <span class="meta-icon">👤</span>
+              <span>By Valencia, Cyrus Kyle T. — IDB3</span>
+            </div>
+            <div class="about-meta-item">
+              <span class="meta-icon">🛠️</span>
+              <span>Built with Angular v21 + Node.js</span>
+            </div>
           </div>
         </div>
       </aside>
@@ -91,9 +84,41 @@
     </div>
   </section>
 
+  <!-- ── WHAT YOU WILL LEARN ── -->
+  <section class="topics-section" aria-label="What You Will Learn">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="section-title">What You Will <span class="glow-text-blue">Learn</span></h2>
+        <p class="section-subtitle">20+ lessons covering everything from programming basics to advanced async patterns</p>
+      </div>
+
+      <div class="topics-grid">
+        <div class="topic-card card" *ngFor="let topic of topics">
+          <div class="topic-top">
+            <span class="topic-icon" aria-hidden="true">{{ topic.icon }}</span>
+            <span class="topic-rank-badge" [ngClass]="rankColors[topic.rank]">{{ topic.rank }}-Rank+</span>
+          </div>
+          <h3 class="topic-title">{{ topic.title }}</h3>
+          <p class="topic-desc">{{ topic.desc }}</p>
+          <div class="topic-footer">
+            <span class="topic-lessons">{{ topic.lessons }} {{ topic.lessons === 1 ? 'lesson' : 'lessons' }}</span>
+            <span class="topic-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="topics-cta">
+        <a routerLink="/lessons" class="btn-primary">
+          <span>⚔️ Start Learning Now</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RANKS ── -->
   <section class="ranks-section" aria-label="Hunter Ranks">
     <div class="section-container">
-      <h2 class="section-title">Hunter <span class="glow-text-blue">Ranks</span></h2>
+      <h2 class="section-title">Hunter <span class="glow-text-purple">Ranks</span></h2>
       <p class="section-subtitle">Rise through the ranks as you master programming concepts</p>
       <div class="ranks-grid" role="list">
         <div class="rank-card" role="listitem" *ngFor="let rank of ranks">
@@ -107,11 +132,14 @@
     </div>
   </section>
 
+  <!-- ── HOW IT WORKS ── -->
   <section class="features-section" aria-label="How It Works">
     <div class="section-container">
-      <h2 class="section-title">How It <span class="glow-text-purple">Works</span></h2>
+      <h2 class="section-title">How It <span class="glow-text-gold">Works</span></h2>
+      <p class="section-subtitle">Six simple steps to becoming a Shadow Scholar</p>
       <div class="features-grid">
-        <article class="feature-card card" *ngFor="let feature of features">
+        <article class="feature-card card" *ngFor="let feature of features; let i = index">
+          <div class="feature-step">{{ i + 1 }}</div>
           <div class="feature-icon" aria-hidden="true">{{ feature.icon }}</div>
           <h3 class="feature-title">{{ feature.title }}</h3>
           <p class="feature-desc">{{ feature.description }}</p>
@@ -120,12 +148,13 @@
     </div>
   </section>
 
+  <!-- ── FOOTER ── -->
   <footer class="footer" role="contentinfo">
     <div class="section-container">
       <div class="footer-content">
         <span class="footer-logo">⚔️ Scholar's Ascent</span>
-        <span class="footer-sdg">SDG 4 — Quality Education | APPDEV1 Project</span>
-        <span class="footer-author">Valencia, Cyrus Kyle T.</span>
+        <span class="footer-sdg">SDG 4 — Quality Education | APPDEV1 | University of Baguio</span>
+        <span class="footer-author">Valencia, Cyrus Kyle T. — IDB3</span>
       </div>
     </div>
   </footer>

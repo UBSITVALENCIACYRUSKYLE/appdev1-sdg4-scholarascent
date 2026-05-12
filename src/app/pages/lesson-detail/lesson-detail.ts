@@ -25,6 +25,7 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
   private lessonService = inject(LessonService);
   private progressService = inject(ProgressService);
   private quizService = inject(QuizService);
+  private lessonStartTime: number = Date.now();
 
   lesson: Lesson | undefined;
   choiceLetters = ['A', 'B', 'C', 'D'];
@@ -46,16 +47,17 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
   activitySubmitted = false;
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.lesson = this.lessonService.getLessonById(id);
-
-    const data = this.quizService.getLessonData(id);
-    if (data) {
-      this.contentBlocks = data.content;
-      this.quizQuestions = data.quiz;
-      this.activity = data.activity;
-    }
+  const id = Number(this.route.snapshot.paramMap.get('id'));
+  this.lesson = this.lessonService.getLessonById(id);
+  const data = this.quizService.getLessonData(id);
+  if (data) {
+    this.contentBlocks = data.content;
+    this.quizQuestions = data.quiz;
+    this.activity = data.activity;
   }
+  //  Start timer when lesson loads
+  this.lessonStartTime = Date.now();
+}
 
   selectAnswer(questionIndex: number, choiceIndex: number): void {
     if (!this.quizSubmitted) {
@@ -79,7 +81,7 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
     this.scorePercent = (this.score / this.quizQuestions.length) * 100;
     this.quizPassed = this.scorePercent >= 70;
     this.quizSubmitted = true;
-
+    
     if (this.quizPassed && this.lesson) {
       const wasAlreadyCompleted = this.progressService.isLessonCompleted(this.lesson.id);
       this.progressService.completeLesson(this.lesson.id, this.lesson.expReward, this.lesson.title);
@@ -109,6 +111,12 @@ export class LessonDetailComponent implements OnInit, CanComponentDeactivate {
         this.showActivity = true;
       }
     }
+    if (this.quizPassed && this.lesson) {
+  //  Track study time
+  const minutesSpent = Math.max(1, Math.round((Date.now() - this.lessonStartTime) / 60000));
+  this.progressService.addStudyTime(minutesSpent);
+  // ... rest of existing code
+}
   }
 
   submitActivity(): void {
